@@ -30,8 +30,8 @@ private:
 	QPoint * active_point = nullptr;
 	int active_row = -1;
 	int active_col = -1;
-	std::vector<Polygon *> active_triangles;
-	std::vector<Polygon *> triangle_paint_list;
+	std::list<Polygon *> active_triangles;
+	std::list<Polygon *> triangle_paint_list;
 
 	bool draw_borders = true;
 	bool is_mouse_pressed = false;
@@ -180,7 +180,7 @@ private:
 		painter->end();
 	}
 
-	void paint_triangles( std::vector<Polygon *> * paint_list )
+	void paint_triangles( std::list<Polygon *> * paint_list )
 	{
 		for ( auto triangle : *paint_list )
 		{

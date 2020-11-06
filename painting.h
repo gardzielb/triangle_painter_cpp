@@ -30,15 +30,17 @@ struct ActiveEdge
 	}
 };
 
-void update_aet( std::vector<ActiveEdge> & aet, int y )
+void update_aet( std::list<ActiveEdge> & aet, int y )
 {
-	auto removed_it = std::remove_if( aet.begin(), aet.end(), [ y ]( const ActiveEdge & e ) { return e.y_max < y; } );
-	aet.erase( removed_it, aet.end() );
+//	auto removed_it = std::remove_if( aet.begin(), aet.end(), [ y ]( const ActiveEdge & e ) { return e.y_max < y; } );
+//	aet.erase( removed_it, aet.end() );
+	aet.remove_if( [ y ]( const ActiveEdge & e ) { return e.y_max < y; } );
 	for ( auto & e : aet )
 	{
 		e.x += e.delta_x;
 	}
-	std::sort( aet.begin(), aet.end(), []( const ActiveEdge & e1, const ActiveEdge & e2 ) { return e1.x <= e2.x; } );
+//	std::sort( aet.begin(), aet.end(), []( const ActiveEdge & e1, const ActiveEdge & e2 ) { return e1.x <= e2.x; } );
+	aet.sort( []( const ActiveEdge & e1, const ActiveEdge & e2 ) { return e1.x <= e2.x; } );
 }
 
 std::pair<QPoint, QPoint> find_neighbors( int index, std::vector<QPoint *> & vertices )
@@ -59,7 +61,7 @@ void paint_scan_line( int x1, int x2, int y, PolygonPainter * painter )
 void fill_polygon( std::vector<QPoint *> & vertices, std::vector<int> & indexes, PolygonPainter * painter )
 {
 	int v_count = vertices.size();
-	std::vector<ActiveEdge> aet;
+	std::list<ActiveEdge> aet;
 
 	for ( int y = vertices[0]->y(); y < vertices[v_count - 1]->y() + 1; y++ )
 	{
@@ -81,11 +83,13 @@ void fill_polygon( std::vector<QPoint *> & vertices, std::vector<int> & indexes,
 		}
 
 		update_aet( aet, y );
+		auto aet_it = aet.begin();
 		for ( int j = 0; j < aet.size() / 2; j++ )
 		{
-			int x1 = aet[2 * j].x, x2 = aet[2 * j + 1].x;
+			int x1 = aet_it->x;
+			aet_it++;
+			int x2 = aet_it->x;
 			paint_scan_line( x1, x2, y, painter );
-//			printf( "Painting scan line: [(%d, %d), (%d, %d)]\n", x1, y, x2, y );
 		}
 	}
 }
