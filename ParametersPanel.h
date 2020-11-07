@@ -9,6 +9,7 @@
 #include <QtWidgets/QWidget>
 #include <QObject>
 #include "ui_parameters.h"
+//#include "AdvancedPixelPainter.h"
 
 class ParametersPanel : public QWidget
 {
@@ -19,6 +20,10 @@ signals:
 	void rowCountChanged( int row_count );
 
 	void colCountChanged( int col_count );
+
+	void gridReset();
+
+//	void settingsChanged( PainterSettings * settings );
 
 private:
 	Ui_ParametersPanel ui;
@@ -36,6 +41,12 @@ public:
 		ui.row_spin->setValue( DEFAULT_ROW_COUNT );
 		ui.col_spin->setValue( DEFAULT_COL_COUNT );
 
+		connect_signals();
+	}
+
+private:
+	void connect_signals()
+	{
 		QObject::connect(
 				ui.row_spin, QOverload<int>::of( &QSpinBox::valueChanged ),
 				[ = ]( int val ) { emit rowCountChanged( val ); }
@@ -44,14 +55,11 @@ public:
 				ui.col_spin, QOverload<int>::of( &QSpinBox::valueChanged ),
 				[ = ]( int val ) { emit colCountChanged( val ); }
 		);
+		QObject::connect( ui.reset_grid_button, &QPushButton::clicked, [ = ]() { emit gridReset(); } );
 	}
 
-public slots:
+private slots:
 
-	void change_row_count( int row_count )
-	{
-		emit rowCountChanged( row_count );
-	};
 };
 
 //const QColor ParametersPanel::DEFAULT_PAINT_COLOR = QColor( 120, 255, 120 );

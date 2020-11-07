@@ -20,7 +20,12 @@ public:
 	{
 		this->surface = surface;
 		this->params_panel = params_panel;
+		connect_signals();
+	}
 
+private:
+	void connect_signals()
+	{
 		QObject::connect(
 				params_panel, &ParametersPanel::rowCountChanged, surface, &TriangleSurface::change_row_count
 		);
@@ -28,6 +33,7 @@ public:
 		QObject::connect(
 				params_panel, &ParametersPanel::colCountChanged, surface, &TriangleSurface::change_column_count
 		);
+		QObject::connect( params_panel, &ParametersPanel::gridReset, surface, &TriangleSurface::create_triangle_grid );
 	}
 };
 
