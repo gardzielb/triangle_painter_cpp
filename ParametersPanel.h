@@ -12,6 +12,7 @@
 #include <QFileDialog>
 #include "ui_parameters.h"
 #include "PainterSettings.h"
+#include "ColorButtonWrapper.h"
 
 class ParametersPanel : public QWidget
 {
@@ -30,11 +31,11 @@ signals:
 private:
 	Ui_ParametersPanel ui;
 	PainterSettings settings;
+	ColorButtonWrapper * paint_color_chooser = nullptr;
+	ColorButtonWrapper * light_color_chooser = nullptr;
 
 	const static int DEFAULT_ROW_COUNT = 10;
 	const static int DEFAULT_COL_COUNT = 10;
-//	const static QColor DEFAULT_PAINT_COLOR;
-//	const static QColor DEFAULT_LIGHT_COLOR;
 
 public:
 	ParametersPanel() : ui(), settings()
@@ -44,7 +45,16 @@ public:
 		ui.row_spin->setValue( DEFAULT_ROW_COUNT );
 		ui.col_spin->setValue( DEFAULT_COL_COUNT );
 
+		paint_color_chooser = new ColorButtonWrapper( *ui.paint_color_button, settings.fill_color );
+		light_color_chooser = new ColorButtonWrapper( *ui.light_color_button, settings.light_color );
+
 		connect_signals();
+	}
+
+	~ParametersPanel() override
+	{
+		delete paint_color_chooser;
+		delete light_color_chooser;
 	}
 
 private:
@@ -61,21 +71,25 @@ private:
 		QObject::connect( ui.reset_grid_button, &QPushButton::clicked, [ = ]() { emit gridReset(); } );
 
 		QObject::connect( ui.paint_texture_button, &QPushButton::clicked, this, &ParametersPanel::choose_paint_image );
-		QObject::connect( ui.paint_color_button, &QPushButton::clicked, this, &ParametersPanel::choose_paint_color );
-		QObject::connect( ui.light_color_button, &QPushButton::clicked, this, &ParametersPanel::choose_light_color );
+		QObject::connect(
+				paint_color_chooser, &ColorButtonWrapper::colorChosen, this, &ParametersPanel::change_paint_color
+		);
+		QObject::connect(
+				light_color_chooser, &ColorButtonWrapper::colorChosen, this, &ParametersPanel::change_light_color
+		);
 	}
 
 private slots:
 
-	void choose_light_color()
+	void change_light_color( const QColor & color )
 	{
-		settings.light_color = QColorDialog::getColor();
+		settings.light_color = color;
 		emit settingsChanged( settings );
 	};
 
-	void choose_paint_color()
+	void change_paint_color( const QColor & color )
 	{
-		settings.fill_color = QColorDialog::getColor();
+		settings.fill_color = color;
 		emit settingsChanged( settings );
 	};
 
@@ -89,9 +103,5 @@ private slots:
 		emit settingsChanged( settings );
 	};
 };
-
-//const QColor ParametersPanel::DEFAULT_PAINT_COLOR = QColor( 120, 255, 120 );
-//const QColor ParametersPanel::DEFAULT_LIGHT_COLOR = QColor( 255, 255, 255 );
-
 
 #endif //TRIANGLE_PAINTER_PARAMETERSPANEL_H

@@ -16,6 +16,10 @@
 
 class TriangleSurface : public QWidget
 {
+public:
+	const static int DEFAULT_WIDTH = 800;
+	const static int DEFAULT_HEIGHT = 800;
+
 private:
 	QPainter * painter = nullptr;
 	PixelPainter * pixel_painter = nullptr;
@@ -41,7 +45,7 @@ public:
 	TriangleSurface( int row_count, int col_count )
 			: row_count( row_count ), col_count( col_count )
 	{
-		setFixedSize( 800, 800 );
+		setFixedSize( DEFAULT_WIDTH, DEFAULT_HEIGHT );
 		pixmap = new QPixmap( width(), height() );
 
 		painter = new QPainter();
