@@ -32,14 +32,11 @@ struct ActiveEdge
 
 void update_aet( std::list<ActiveEdge> & aet, int y )
 {
-//	auto removed_it = std::remove_if( aet.begin(), aet.end(), [ y ]( const ActiveEdge & e ) { return e.y_max < y; } );
-//	aet.erase( removed_it, aet.end() );
 	aet.remove_if( [ y ]( const ActiveEdge & e ) { return e.y_max < y; } );
 	for ( auto & e : aet )
 	{
 		e.x += e.delta_x;
 	}
-//	std::sort( aet.begin(), aet.end(), []( const ActiveEdge & e1, const ActiveEdge & e2 ) { return e1.x <= e2.x; } );
 	aet.sort( []( const ActiveEdge & e1, const ActiveEdge & e2 ) { return e1.x <= e2.x; } );
 }
 

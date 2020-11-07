@@ -75,8 +75,7 @@ public:
 		find_active_triangles( active_row, active_col );
 		for ( auto triangle : active_triangles )
 		{
-			auto removed = std::find( triangle_paint_list.begin(), triangle_paint_list.end(), triangle );
-			triangle_paint_list.erase( removed );
+			triangle_paint_list.remove( triangle );
 		}
 
 		full_repaint();
