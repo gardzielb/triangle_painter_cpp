@@ -47,9 +47,12 @@ public:
 		ui.row_spin->setValue( DEFAULT_ROW_COUNT );
 		ui.col_spin->setValue( DEFAULT_COL_COUNT );
 
+		ui.kd_slider->setValue( 0.5 * ui.kd_slider->maximum() );
+		ui.ks_slider->setValue( 0.5 * ui.ks_slider->maximum() );
+
 		set_label_text( ui.m_label, ui.m_slider->value() );
-		set_label_text( ui.kd_label, ui.kd_slider->value() );
-		set_label_text( ui.ks_label, ui.ks_slider->value() );
+		set_label_text( ui.kd_label, (float) ui.kd_slider->value() / ui.kd_slider->maximum() );
+		set_label_text( ui.ks_label, (float) ui.ks_slider->value() / ui.ks_slider->maximum() );
 
 		paint_color_chooser = new ColorButtonWrapper( *ui.paint_color_button, settings.fill_color );
 		light_color_chooser = new ColorButtonWrapper( *ui.light_color_button, settings.light_color );
@@ -84,14 +87,31 @@ private:
 				light_color_chooser, &ColorButtonWrapper::colorChosen, this, &ParametersPanel::change_light_color
 		);
 
-		QObject::connect( ui.m_slider, &QSlider::valueChanged, [ = ]( int m ) { change_m( m ); } );
+		QObject::connect( ui.m_slider, &QSlider::valueChanged, [ = ]( int m ) { set_label_text( ui.m_label, m ); } );
 		QObject::connect(
 				ui.kd_slider, &QSlider::valueChanged,
-				[ = ]( int kd ) { change_kd( (float) kd / ui.kd_slider->maximum(), true ); }
+				[ = ]( int kd ) { update_kd( (float) kd / ui.kd_slider->maximum(), true ); }
 		);
 		QObject::connect(
 				ui.ks_slider, &QSlider::valueChanged,
-				[ = ]( int ks ) { change_ks( (float) ks / ui.ks_slider->maximum(), true ); }
+				[ = ]( int ks ) { update_ks( (float) ks / ui.ks_slider->maximum(), true ); }
+		);
+
+		QObject::connect(
+				ui.m_slider, &QSlider::sliderReleased,
+				[ = ]() { change_slider_param( &settings.m, ui.m_slider->value() ); }
+		);
+		QObject::connect(
+				ui.kd_slider, &QSlider::sliderReleased,
+				[ = ]() {
+					change_slider_param( &settings.kd, (float) ui.kd_slider->value() / ui.kd_slider->maximum() );
+				}
+		);
+		QObject::connect(
+				ui.ks_slider, &QSlider::sliderReleased,
+				[ = ]() {
+					change_slider_param( &settings.ks, (float) ui.ks_slider->value() / ui.ks_slider->maximum() );
+				}
 		);
 
 		QObject::connect(
@@ -151,14 +171,19 @@ private slots:
 		emit settingsChanged( settings );
 	};
 
-	void change_m( int m )
+	void change_slider_param( int * param, int value )
 	{
-		set_label_text( ui.m_label, m );
-		settings.m = m;
+		*param = value;
 		emit settingsChanged( settings );
 	}
 
-	void change_kd( float kd, bool user_call )
+	void change_slider_param( float * param, float value )
+	{
+		*param = value;
+		emit settingsChanged( settings );
+	}
+
+	void update_kd( float kd, bool user_call )
 	{
 		set_label_text( ui.kd_label, kd );
 		settings.kd = kd;
@@ -166,12 +191,11 @@ private slots:
 		if ( user_call )
 		{
 			ui.ks_slider->setValue( ui.ks_slider->maximum() * (1 - kd) );
-			change_ks( 1 - kd, false );
-			emit settingsChanged( settings );
+			update_ks( 1 - kd, false );
 		}
 	}
 
-	void change_ks( float ks, bool user_call )
+	void update_ks( float ks, bool user_call )
 	{
 		set_label_text( ui.ks_label, ks );
 		settings.ks = ks;
@@ -179,8 +203,7 @@ private slots:
 		if ( user_call )
 		{
 			ui.kd_slider->setValue( ui.kd_slider->maximum() * (1 - ks) );
-			change_kd( 1 - ks, false );
-			emit settingsChanged( settings );
+			update_kd( 1 - ks, false );
 		}
 	}
 
