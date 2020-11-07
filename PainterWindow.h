@@ -9,18 +9,22 @@
 #include <QtWidgets/QMainWindow>
 #include "ParametersPanel.h"
 #include "TriangleSurface.h"
+#include "TriangleSurfaceController.h"
 
 class PainterWindow : public QMainWindow
 {
 private:
-	ParametersPanel * params_panel = new ParametersPanel();
+	ParametersPanel * params_panel = nullptr;
 	TriangleSurface * triangle_surface = nullptr;
+	TriangleSurfaceController * controller = nullptr;
 	QWidget * central_widget = new QWidget();
 
 public:
 	PainterWindow()
 	{
 		triangle_surface = new TriangleSurface( 10, 10 );
+		params_panel = new ParametersPanel();
+		controller = new TriangleSurfaceController( triangle_surface, params_panel );
 
 		auto layout = new QHBoxLayout();
 		layout->addWidget( triangle_surface );

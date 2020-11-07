@@ -37,18 +37,19 @@ int compute_color_value( int color, int light, int normal_light_dot, int vr_dot,
 class AdvancedPixelPainter : public PixelPainter
 {
 private:
-	QPainter * painter;
-	PainterSettings * settings = new PainterSettings();
+	QPainter * painter = nullptr;
+	PainterSettings settings;
 
 public:
-	explicit AdvancedPixelPainter( QPainter * painter )
+	explicit AdvancedPixelPainter( QPainter * painter, const PainterSettings settings )
+			: settings( settings )
 	{
 		this->painter = painter;
 	}
 
 	void paint_pixel( int x, int y ) override
 	{
-		QColor color = settings->image ? settings->image->pixel( x, y ) : *settings->fill_color;
+		QColor color = settings.image ? settings.image->pixel( x, y ) : *settings.fill_color;
 
 //		int normal_light_dot = gbGeo::dot( settings->normal_vector, settings->light_vector );
 //		gbGeo::Vector r_vector = 2 * normal_light_dot * settings->normal_vector - settings->light_vector;
@@ -71,11 +72,6 @@ public:
 //		painter->setPen( QColor( r, g, b ) );
 		painter->setPen( color );
 		painter->drawPoint( x, y );
-	}
-
-	~AdvancedPixelPainter() override
-	{
-		delete settings;
 	}
 };
 

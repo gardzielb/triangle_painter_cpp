@@ -46,10 +46,10 @@ public:
 		pixmap = new QPixmap( width(), height() );
 
 		painter = new QPainter();
-		pixel_painter = new AdvancedPixelPainter( painter );
+		pixel_painter = new AdvancedPixelPainter( painter, PainterSettings() );
 		polygon_painter = new QtPolygonPainter( painter, pixel_painter );
 
-		refresh_triangle_grid( row_count, col_count );
+		create_triangle_grid();
 		setMouseTracking( true );
 	}
 
@@ -131,11 +131,8 @@ public:
 		repaint();
 	}
 
-	void refresh_triangle_grid( int rows, int cols )
+	void create_triangle_grid()
 	{
-		this->row_count = rows;
-		this->col_count = cols;
-
 		int cell_height = height() / row_count;
 		int cell_width = width() / col_count;
 
@@ -161,6 +158,12 @@ public:
 		repaint();
 	}
 
+	void change_settings( const PainterSettings & settings )
+	{
+		delete pixel_painter;
+		pixel_painter = new AdvancedPixelPainter( painter, settings );
+	}
+
 	~TriangleSurface() override
 	{
 		delete pixmap;
@@ -169,6 +172,21 @@ public:
 		delete painter;
 		delete grid;
 	}
+
+public slots:
+
+	void change_row_count( int rows )
+	{
+		row_count = rows;
+		create_triangle_grid();
+	};
+
+	void change_column_count( int cols )
+	{
+		col_count = cols;
+		create_triangle_grid();
+	};
+
 
 private:
 	void paint_pixmap()

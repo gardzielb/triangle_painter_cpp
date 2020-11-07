@@ -1,5 +1,4 @@
 #include <QtGui/QScreen>
-#include <QtCore/QUrl>
 #include <QDebug>
 #include <QtWidgets/QApplication>
 #include "PainterWindow.h"
