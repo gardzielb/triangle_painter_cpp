@@ -13,7 +13,6 @@
 #include "QtPolygonPainter.h"
 #include "AdvancedPixelPainter.h"
 #include "Polygon.h"
-#include "gbGeo.h"
 
 class TriangleSurface : public QWidget
 {

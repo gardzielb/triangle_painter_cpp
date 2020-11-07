@@ -9,14 +9,12 @@
 #include <QtWidgets/QMainWindow>
 #include "ParametersPanel.h"
 #include "TriangleSurface.h"
-#include "TriangleSurfaceController.h"
 
 class PainterWindow : public QMainWindow
 {
 private:
 	ParametersPanel * params_panel = nullptr;
 	TriangleSurface * triangle_surface = nullptr;
-	TriangleSurfaceController * controller = nullptr;
 	QWidget * central_widget = new QWidget();
 
 public:
@@ -24,7 +22,7 @@ public:
 	{
 		triangle_surface = new TriangleSurface( 10, 10 );
 		params_panel = new ParametersPanel();
-		controller = new TriangleSurfaceController( triangle_surface, params_panel );
+		connect_signals();
 
 		auto layout = new QHBoxLayout();
 		layout->addWidget( triangle_surface );
@@ -41,6 +39,24 @@ public:
 		delete params_panel;
 		delete triangle_surface;
 		delete central_widget;
+	}
+
+private:
+	void connect_signals()
+	{
+		QObject::connect(
+				params_panel, &ParametersPanel::rowCountChanged, triangle_surface, &TriangleSurface::change_row_count
+		);
+
+		QObject::connect(
+				params_panel, &ParametersPanel::colCountChanged, triangle_surface, &TriangleSurface::change_column_count
+		);
+		QObject::connect(
+				params_panel, &ParametersPanel::gridReset, triangle_surface, &TriangleSurface::create_triangle_grid
+		);
+		QObject::connect(
+				params_panel, &ParametersPanel::settingsChanged, triangle_surface, &TriangleSurface::change_settings
+		);
 	}
 };
 

@@ -6,11 +6,7 @@
 #define TRIANGLE_PAINTER_GBGEO_H
 
 
-#include <utility>
 #include <vector>
-#include <numeric>
-#include <algorithm>
-#include <functional>
 
 
 namespace gbGeo
@@ -21,80 +17,32 @@ namespace gbGeo
 		std::vector<int> * array;
 
 	public:
-		Vector( std::initializer_list<int> in_array )
-		{
-			array = new std::vector<int>( in_array );
-		}
+		Vector( std::initializer_list<int> in_array );
 
-		explicit Vector( std::vector<int> in_array )
-		{
-			array = new std::vector<int>( std::move( in_array ) );
-		}
+		explicit Vector( std::vector<int> in_array );
 
-		int size() const
-		{
-			return array->size();
-		}
+		int size() const;
 
-		auto first() const
-		{
-			return array->cbegin();
-		}
+		auto first() const;
 
-		auto last() const
-		{
-			return array->cend();
-		}
+		auto last() const;
 
-		auto first()
-		{
-			return array->begin();
-		}
+		auto first();
 
-		auto last()
-		{
-			return array->end();
-		}
+		auto last();
 
-		~Vector()
-		{
-			delete array;
-		}
+		~Vector();
 	};
 
-	Vector operator*( int a, const Vector & v )
-	{
-		std::vector<int> product( v.size() );
-		std::transform( v.first(), v.last(), product.begin(), [ a ]( const int x ) { return a * x; } );
-		return Vector( product );
-	}
+	Vector operator*( int a, const Vector & v );
 
-	Vector operator-( const Vector & v1, const Vector & v2 )
-	{
-		std::vector<int> out( v1.size() );
-		std::transform( v1.first(), v1.last(), v2.first(), out.begin(), std::minus<>() );
-		return Vector( out );
-	}
+	Vector operator-( const Vector & v1, const Vector & v2 );
 
-	int dot( Vector v1, Vector v2 )
-	{
-		return std::inner_product( v1.first(), v1.last(), v2.first(), 0 );
-	}
+	int dot( Vector v1, Vector v2 );
 
-	float line_length( int x1, int y1, int x2, int y2 )
-	{
-		return sqrt( pow( x1 - x2, 2 ) + pow( y1 - y2, 2 ) );
-	}
+	float line_length( int x1, int y1, int x2, int y2 );
 
-	std::pair<float, int> line_equation( int x1, int y1, int x2, int y2 )
-	{
-		int dx = x1 - x2;
-		if ( !dx ) return std::make_pair( 0, 0 );
-
-		float a = (float) (y1 - y2) / (float) (x1 - x2);
-		int b = y1 - a * x1;
-		return std::make_pair( a, b );
-	}
+	std::pair<float, int> line_equation( int x1, int y1, int x2, int y2 );
 }
 
 

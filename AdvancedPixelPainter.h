@@ -9,21 +9,7 @@
 #include <QtGui/QPainter>
 #include <cmath>
 #include "PixelPainter.h"
-#include "gbGeo.h"
-
-
-struct PainterSettings
-{
-	int m = 1;
-	float kd = 0.5;
-	float ks = 0.5;
-	gbGeo::Vector * normal_vector = new gbGeo::Vector( { 0, 0, 1 } );
-	gbGeo::Vector * light_vector = new gbGeo::Vector( { 0, 0, 1 } );
-	QColor * light_color = new QColor( 255, 255, 255 );
-	QColor * fill_color = new QColor( 0, 255, 0 );
-	QImage * image = nullptr;
-};
-
+#include "PainterSettings.h"
 
 int compute_color_value( int color, int light, int normal_light_dot, int vr_dot, float kd, float ks, int m )
 {

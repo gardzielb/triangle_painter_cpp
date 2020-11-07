@@ -9,7 +9,7 @@
 #include <QtWidgets/QWidget>
 #include <QObject>
 #include "ui_parameters.h"
-//#include "AdvancedPixelPainter.h"
+#include "PainterSettings.h"
 
 class ParametersPanel : public QWidget
 {
@@ -23,7 +23,7 @@ signals:
 
 	void gridReset();
 
-//	void settingsChanged( PainterSettings * settings );
+	void settingsChanged( PainterSettings & settings );
 
 private:
 	Ui_ParametersPanel ui;
