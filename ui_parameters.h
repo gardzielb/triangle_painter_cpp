@@ -43,43 +43,43 @@ public:
     QLabel *label_4;
     QLabel *label_3;
     QVBoxLayout *verticalLayout;
-    QRadioButton *radioButton;
-    QRadioButton *radioButton_2;
+    QRadioButton *constant_light_radio;
+    QRadioButton *sphere_light_radio;
     QPushButton *light_color_button;
     QGroupBox *groupBox_3;
     QWidget *gridLayoutWidget_3;
     QGridLayout *gridLayout_3;
     QPushButton *paint_texture_button;
-    QRadioButton *radioButton_7;
-    QRadioButton *radioButton_8;
+    QRadioButton *constant_paint_radio;
+    QRadioButton *texture_paint_radio;
     QPushButton *paint_color_button;
     QGroupBox *groupBox_5;
     QWidget *gridLayoutWidget_4;
     QGridLayout *gridLayout_4;
-    QRadioButton *radioButton_3;
-    QRadioButton *radioButton_4;
+    QRadioButton *precise_paint_radio;
+    QRadioButton *vertex_paint_radio;
     QGroupBox *groupBox_4;
     QWidget *gridLayoutWidget_5;
     QGridLayout *gridLayout_5;
-    QRadioButton *radioButton_6;
-    QRadioButton *radioButton_5;
+    QRadioButton *texture_n_radio;
+    QRadioButton *constantn_radio;
     QPushButton *pushButton_2;
     QGroupBox *groupBox_6;
     QWidget *gridLayoutWidget_6;
     QGridLayout *gridLayout_6;
     QLabel *label_9;
-    QSlider *horizontalSlider_2;
-    QSlider *horizontalSlider_3;
-    QSlider *horizontalSlider;
+    QSlider *ks_slider;
+    QSlider *m_slider;
+    QSlider *kd_slider;
     QLabel *label_8;
     QLabel *label_7;
-    QLabel *label_10;
-    QLabel *label_11;
-    QLabel *label_12;
-    QButtonGroup *n_button_group;
+    QLabel *kd_label;
+    QLabel *ks_label;
+    QLabel *m_label;
     QButtonGroup *color_det_button_group;
-    QButtonGroup *paint_button_group;
+    QButtonGroup *n_button_group;
     QButtonGroup *light_button_group;
+    QButtonGroup *paint_button_group;
 
     void setupUi(QWidget *ParametersPanel)
     {
@@ -91,7 +91,7 @@ public:
         groupBox->setGeometry(QRect(10, 10, 341, 111));
         gridLayoutWidget = new QWidget(groupBox);
         gridLayoutWidget->setObjectName(QStringLiteral("gridLayoutWidget"));
-        gridLayoutWidget->setGeometry(QRect(9, 19, 321, 81));
+        gridLayoutWidget->setGeometry(QRect(9, 19, 321, 107));
         gridLayout = new QGridLayout(gridLayoutWidget);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         gridLayout->setContentsMargins(0, 0, 0, 0);
@@ -135,7 +135,7 @@ public:
         groupBox_2->setGeometry(QRect(10, 130, 341, 101));
         gridLayoutWidget_2 = new QWidget(groupBox_2);
         gridLayoutWidget_2->setObjectName(QStringLiteral("gridLayoutWidget_2"));
-        gridLayoutWidget_2->setGeometry(QRect(9, 19, 321, 73));
+        gridLayoutWidget_2->setGeometry(QRect(9, 19, 321, 95));
         gridLayout_2 = new QGridLayout(gridLayoutWidget_2);
         gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
         gridLayout_2->setContentsMargins(0, 0, 0, 0);
@@ -151,21 +151,21 @@ public:
 
         verticalLayout = new QVBoxLayout();
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
-        radioButton = new QRadioButton(gridLayoutWidget_2);
+        constant_light_radio = new QRadioButton(gridLayoutWidget_2);
         light_button_group = new QButtonGroup(ParametersPanel);
         light_button_group->setObjectName(QStringLiteral("light_button_group"));
-        light_button_group->addButton(radioButton);
-        radioButton->setObjectName(QStringLiteral("radioButton"));
-        radioButton->setMinimumSize(QSize(154, 0));
-        radioButton->setChecked(true);
+        light_button_group->addButton(constant_light_radio);
+        constant_light_radio->setObjectName(QStringLiteral("constant_light_radio"));
+        constant_light_radio->setMinimumSize(QSize(154, 0));
+        constant_light_radio->setChecked(true);
 
-        verticalLayout->addWidget(radioButton);
+        verticalLayout->addWidget(constant_light_radio);
 
-        radioButton_2 = new QRadioButton(gridLayoutWidget_2);
-        light_button_group->addButton(radioButton_2);
-        radioButton_2->setObjectName(QStringLiteral("radioButton_2"));
+        sphere_light_radio = new QRadioButton(gridLayoutWidget_2);
+        light_button_group->addButton(sphere_light_radio);
+        sphere_light_radio->setObjectName(QStringLiteral("sphere_light_radio"));
 
-        verticalLayout->addWidget(radioButton_2);
+        verticalLayout->addWidget(sphere_light_radio);
 
 
         gridLayout_2->addLayout(verticalLayout, 1, 1, 1, 1);
@@ -190,20 +190,21 @@ public:
 
         gridLayout_3->addWidget(paint_texture_button, 1, 1, 1, 1);
 
-        radioButton_7 = new QRadioButton(gridLayoutWidget_3);
+        constant_paint_radio = new QRadioButton(gridLayoutWidget_3);
         paint_button_group = new QButtonGroup(ParametersPanel);
         paint_button_group->setObjectName(QStringLiteral("paint_button_group"));
-        paint_button_group->addButton(radioButton_7);
-        radioButton_7->setObjectName(QStringLiteral("radioButton_7"));
-        radioButton_7->setChecked(true);
+        paint_button_group->addButton(constant_paint_radio);
+        constant_paint_radio->setObjectName(QStringLiteral("constant_paint_radio"));
+        constant_paint_radio->setChecked(true);
 
-        gridLayout_3->addWidget(radioButton_7, 0, 0, 1, 1);
+        gridLayout_3->addWidget(constant_paint_radio, 0, 0, 1, 1);
 
-        radioButton_8 = new QRadioButton(gridLayoutWidget_3);
-        paint_button_group->addButton(radioButton_8);
-        radioButton_8->setObjectName(QStringLiteral("radioButton_8"));
+        texture_paint_radio = new QRadioButton(gridLayoutWidget_3);
+        paint_button_group->addButton(texture_paint_radio);
+        texture_paint_radio->setObjectName(QStringLiteral("texture_paint_radio"));
+        texture_paint_radio->setEnabled(false);
 
-        gridLayout_3->addWidget(radioButton_8, 1, 0, 1, 1);
+        gridLayout_3->addWidget(texture_paint_radio, 1, 0, 1, 1);
 
         paint_color_button = new QPushButton(gridLayoutWidget_3);
         paint_color_button->setObjectName(QStringLiteral("paint_color_button"));
@@ -219,20 +220,20 @@ public:
         gridLayout_4 = new QGridLayout(gridLayoutWidget_4);
         gridLayout_4->setObjectName(QStringLiteral("gridLayout_4"));
         gridLayout_4->setContentsMargins(0, 0, 0, 0);
-        radioButton_3 = new QRadioButton(gridLayoutWidget_4);
+        precise_paint_radio = new QRadioButton(gridLayoutWidget_4);
         color_det_button_group = new QButtonGroup(ParametersPanel);
         color_det_button_group->setObjectName(QStringLiteral("color_det_button_group"));
-        color_det_button_group->addButton(radioButton_3);
-        radioButton_3->setObjectName(QStringLiteral("radioButton_3"));
-        radioButton_3->setChecked(true);
+        color_det_button_group->addButton(precise_paint_radio);
+        precise_paint_radio->setObjectName(QStringLiteral("precise_paint_radio"));
+        precise_paint_radio->setChecked(true);
 
-        gridLayout_4->addWidget(radioButton_3, 0, 0, 1, 1);
+        gridLayout_4->addWidget(precise_paint_radio, 0, 0, 1, 1);
 
-        radioButton_4 = new QRadioButton(gridLayoutWidget_4);
-        color_det_button_group->addButton(radioButton_4);
-        radioButton_4->setObjectName(QStringLiteral("radioButton_4"));
+        vertex_paint_radio = new QRadioButton(gridLayoutWidget_4);
+        color_det_button_group->addButton(vertex_paint_radio);
+        vertex_paint_radio->setObjectName(QStringLiteral("vertex_paint_radio"));
 
-        gridLayout_4->addWidget(radioButton_4, 0, 1, 1, 1);
+        gridLayout_4->addWidget(vertex_paint_radio, 0, 1, 1, 1);
 
         groupBox_4 = new QGroupBox(ParametersPanel);
         groupBox_4->setObjectName(QStringLiteral("groupBox_4"));
@@ -243,20 +244,21 @@ public:
         gridLayout_5 = new QGridLayout(gridLayoutWidget_5);
         gridLayout_5->setObjectName(QStringLiteral("gridLayout_5"));
         gridLayout_5->setContentsMargins(0, 0, 0, 0);
-        radioButton_6 = new QRadioButton(gridLayoutWidget_5);
+        texture_n_radio = new QRadioButton(gridLayoutWidget_5);
         n_button_group = new QButtonGroup(ParametersPanel);
         n_button_group->setObjectName(QStringLiteral("n_button_group"));
-        n_button_group->addButton(radioButton_6);
-        radioButton_6->setObjectName(QStringLiteral("radioButton_6"));
+        n_button_group->addButton(texture_n_radio);
+        texture_n_radio->setObjectName(QStringLiteral("texture_n_radio"));
+        texture_n_radio->setEnabled(false);
 
-        gridLayout_5->addWidget(radioButton_6, 1, 0, 1, 1);
+        gridLayout_5->addWidget(texture_n_radio, 1, 0, 1, 1);
 
-        radioButton_5 = new QRadioButton(gridLayoutWidget_5);
-        n_button_group->addButton(radioButton_5);
-        radioButton_5->setObjectName(QStringLiteral("radioButton_5"));
-        radioButton_5->setChecked(true);
+        constantn_radio = new QRadioButton(gridLayoutWidget_5);
+        n_button_group->addButton(constantn_radio);
+        constantn_radio->setObjectName(QStringLiteral("constantn_radio"));
+        constantn_radio->setChecked(true);
 
-        gridLayout_5->addWidget(radioButton_5, 0, 0, 1, 1);
+        gridLayout_5->addWidget(constantn_radio, 0, 0, 1, 1);
 
         pushButton_2 = new QPushButton(gridLayoutWidget_5);
         pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
@@ -277,23 +279,28 @@ public:
 
         gridLayout_6->addWidget(label_9, 2, 0, 1, 1);
 
-        horizontalSlider_2 = new QSlider(gridLayoutWidget_6);
-        horizontalSlider_2->setObjectName(QStringLiteral("horizontalSlider_2"));
-        horizontalSlider_2->setOrientation(Qt::Horizontal);
+        ks_slider = new QSlider(gridLayoutWidget_6);
+        ks_slider->setObjectName(QStringLiteral("ks_slider"));
+        ks_slider->setMaximum(100);
+        ks_slider->setOrientation(Qt::Horizontal);
 
-        gridLayout_6->addWidget(horizontalSlider_2, 1, 1, 1, 1);
+        gridLayout_6->addWidget(ks_slider, 1, 1, 1, 1);
 
-        horizontalSlider_3 = new QSlider(gridLayoutWidget_6);
-        horizontalSlider_3->setObjectName(QStringLiteral("horizontalSlider_3"));
-        horizontalSlider_3->setOrientation(Qt::Horizontal);
+        m_slider = new QSlider(gridLayoutWidget_6);
+        m_slider->setObjectName(QStringLiteral("m_slider"));
+        m_slider->setMinimum(1);
+        m_slider->setMaximum(100);
+        m_slider->setOrientation(Qt::Horizontal);
 
-        gridLayout_6->addWidget(horizontalSlider_3, 2, 1, 1, 1);
+        gridLayout_6->addWidget(m_slider, 2, 1, 1, 1);
 
-        horizontalSlider = new QSlider(gridLayoutWidget_6);
-        horizontalSlider->setObjectName(QStringLiteral("horizontalSlider"));
-        horizontalSlider->setOrientation(Qt::Horizontal);
+        kd_slider = new QSlider(gridLayoutWidget_6);
+        kd_slider->setObjectName(QStringLiteral("kd_slider"));
+        kd_slider->setMinimum(0);
+        kd_slider->setMaximum(100);
+        kd_slider->setOrientation(Qt::Horizontal);
 
-        gridLayout_6->addWidget(horizontalSlider, 0, 1, 1, 1);
+        gridLayout_6->addWidget(kd_slider, 0, 1, 1, 1);
 
         label_8 = new QLabel(gridLayoutWidget_6);
         label_8->setObjectName(QStringLiteral("label_8"));
@@ -305,20 +312,23 @@ public:
 
         gridLayout_6->addWidget(label_7, 0, 0, 1, 1);
 
-        label_10 = new QLabel(gridLayoutWidget_6);
-        label_10->setObjectName(QStringLiteral("label_10"));
+        kd_label = new QLabel(gridLayoutWidget_6);
+        kd_label->setObjectName(QStringLiteral("kd_label"));
+        kd_label->setMinimumSize(QSize(40, 0));
 
-        gridLayout_6->addWidget(label_10, 0, 2, 1, 1);
+        gridLayout_6->addWidget(kd_label, 0, 2, 1, 1);
 
-        label_11 = new QLabel(gridLayoutWidget_6);
-        label_11->setObjectName(QStringLiteral("label_11"));
+        ks_label = new QLabel(gridLayoutWidget_6);
+        ks_label->setObjectName(QStringLiteral("ks_label"));
+        ks_label->setMinimumSize(QSize(40, 0));
 
-        gridLayout_6->addWidget(label_11, 1, 2, 1, 1);
+        gridLayout_6->addWidget(ks_label, 1, 2, 1, 1);
 
-        label_12 = new QLabel(gridLayoutWidget_6);
-        label_12->setObjectName(QStringLiteral("label_12"));
+        m_label = new QLabel(gridLayoutWidget_6);
+        m_label->setObjectName(QStringLiteral("m_label"));
+        m_label->setMinimumSize(QSize(40, 0));
 
-        gridLayout_6->addWidget(label_12, 2, 2, 1, 1);
+        gridLayout_6->addWidget(m_label, 2, 2, 1, 1);
 
 
         retranslateUi(ParametersPanel);
@@ -337,28 +347,28 @@ public:
         groupBox_2->setTitle(QApplication::translate("ParametersPanel", "Light", nullptr));
         label_4->setText(QApplication::translate("ParametersPanel", "Vector", nullptr));
         label_3->setText(QApplication::translate("ParametersPanel", "Color", nullptr));
-        radioButton->setText(QApplication::translate("ParametersPanel", "Constant", nullptr));
-        radioButton_2->setText(QApplication::translate("ParametersPanel", "Spherical", nullptr));
+        constant_light_radio->setText(QApplication::translate("ParametersPanel", "Constant", nullptr));
+        sphere_light_radio->setText(QApplication::translate("ParametersPanel", "Spherical", nullptr));
         light_color_button->setText(QString());
         groupBox_3->setTitle(QApplication::translate("ParametersPanel", "Paint color", nullptr));
         paint_texture_button->setText(QApplication::translate("ParametersPanel", "Choose", nullptr));
-        radioButton_7->setText(QApplication::translate("ParametersPanel", "Constant", nullptr));
-        radioButton_8->setText(QApplication::translate("ParametersPanel", "Texture", nullptr));
+        constant_paint_radio->setText(QApplication::translate("ParametersPanel", "Constant", nullptr));
+        texture_paint_radio->setText(QApplication::translate("ParametersPanel", "Texture", nullptr));
         paint_color_button->setText(QString());
         groupBox_5->setTitle(QApplication::translate("ParametersPanel", "Color determination", nullptr));
-        radioButton_3->setText(QApplication::translate("ParametersPanel", "Precise", nullptr));
-        radioButton_4->setText(QApplication::translate("ParametersPanel", "From vertices", nullptr));
+        precise_paint_radio->setText(QApplication::translate("ParametersPanel", "Precise", nullptr));
+        vertex_paint_radio->setText(QApplication::translate("ParametersPanel", "From vertices", nullptr));
         groupBox_4->setTitle(QApplication::translate("ParametersPanel", "N vector", nullptr));
-        radioButton_6->setText(QApplication::translate("ParametersPanel", "From texture", nullptr));
-        radioButton_5->setText(QApplication::translate("ParametersPanel", "Constant", nullptr));
+        texture_n_radio->setText(QApplication::translate("ParametersPanel", "From texture", nullptr));
+        constantn_radio->setText(QApplication::translate("ParametersPanel", "Constant", nullptr));
         pushButton_2->setText(QApplication::translate("ParametersPanel", "Choose", nullptr));
         groupBox_6->setTitle(QApplication::translate("ParametersPanel", "Parameters", nullptr));
         label_9->setText(QApplication::translate("ParametersPanel", "m", nullptr));
         label_8->setText(QApplication::translate("ParametersPanel", "ks", nullptr));
         label_7->setText(QApplication::translate("ParametersPanel", "kd", nullptr));
-        label_10->setText(QApplication::translate("ParametersPanel", "0", nullptr));
-        label_11->setText(QApplication::translate("ParametersPanel", "0", nullptr));
-        label_12->setText(QApplication::translate("ParametersPanel", "0", nullptr));
+        kd_label->setText(QApplication::translate("ParametersPanel", "0", nullptr));
+        ks_label->setText(QApplication::translate("ParametersPanel", "0", nullptr));
+        m_label->setText(QApplication::translate("ParametersPanel", "0", nullptr));
     } // retranslateUi
 
 };

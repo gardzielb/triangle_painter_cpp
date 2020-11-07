@@ -6,6 +6,8 @@
 #define TRIANGLE_PAINTER_PARAMETERSPANEL_H
 
 
+#include <iostream>
+#include <string>
 #include <QtWidgets/QWidget>
 #include <QObject>
 #include <QtWidgets/QColorDialog>
@@ -77,6 +79,41 @@ private:
 		QObject::connect(
 				light_color_chooser, &ColorButtonWrapper::colorChosen, this, &ParametersPanel::change_light_color
 		);
+
+		QObject::connect( ui.m_slider, &QSlider::valueChanged, [ = ]( int m ) { change_m( m ); } );
+		QObject::connect(
+				ui.kd_slider, &QSlider::valueChanged,
+				[ = ]( int kd ) { change_kd( (float) kd / ui.kd_slider->maximum(), true ); }
+		);
+		QObject::connect(
+				ui.ks_slider, &QSlider::valueChanged,
+				[ = ]( int ks ) { change_ks( (float) ks / ui.ks_slider->maximum(), true ); }
+		);
+
+		QObject::connect(
+				ui.constant_paint_radio, &QRadioButton::clicked,
+				[ = ]( bool checked ) { change_radio_param( &settings.texture_paint, !checked ); }
+		);
+		QObject::connect(
+				ui.texture_paint_radio, &QRadioButton::clicked,
+				[ = ]( bool checked ) { change_radio_param( &settings.texture_paint, checked ); }
+		);
+		QObject::connect(
+				ui.constant_light_radio, &QRadioButton::clicked,
+				[ = ]( bool checked ) { change_radio_param( &settings.spherical_light, !checked ); }
+		);
+		QObject::connect(
+				ui.sphere_light_radio, &QRadioButton::clicked,
+				[ = ]( bool checked ) { change_radio_param( &settings.spherical_light, checked ); }
+		);
+		QObject::connect(
+				ui.precise_paint_radio, &QRadioButton::clicked,
+				[ = ]( bool checked ) { change_radio_param( &settings.vertex_interpolation, !checked ); }
+		);
+		QObject::connect(
+				ui.vertex_paint_radio, &QRadioButton::clicked,
+				[ = ]( bool checked ) { change_radio_param( &settings.vertex_interpolation, checked ); }
+		);
 	}
 
 private slots:
@@ -93,6 +130,12 @@ private slots:
 		emit settingsChanged( settings );
 	};
 
+	void change_radio_param( bool * param, bool value )
+	{
+		*param = value;
+		emit settingsChanged( settings );
+	}
+
 	void choose_paint_image()
 	{
 		QString img_file = QFileDialog::getOpenFileName();
@@ -100,8 +143,48 @@ private slots:
 		auto img = new QImage( img_file );
 		settings.image = new QImage( std::move( img->scaled( 800, 800, Qt::IgnoreAspectRatio ) ) );
 		delete img;
+		ui.texture_paint_radio->setEnabled( true );
 		emit settingsChanged( settings );
 	};
+
+	void change_m( int m )
+	{
+		set_label_text( ui.m_label, m );
+		settings.m = m;
+		emit settingsChanged( settings );
+	}
+
+	void change_kd( float kd, bool user_call )
+	{
+		set_label_text( ui.kd_label, kd );
+		settings.kd = kd;
+
+		if ( user_call )
+		{
+			ui.ks_slider->setValue( ui.ks_slider->maximum() * (1 - kd) );
+			change_ks( 1 - kd, false );
+			emit settingsChanged( settings );
+		}
+	}
+
+	void change_ks( float ks, bool user_call )
+	{
+		set_label_text( ui.ks_label, ks );
+		settings.ks = ks;
+
+		if ( user_call )
+		{
+			ui.kd_slider->setValue( ui.kd_slider->maximum() * (1 - ks) );
+			change_kd( 1 - ks, false );
+			emit settingsChanged( settings );
+		}
+	}
+
+private:
+	static void set_label_text( QLabel * label, float value )
+	{
+		label->setText( QString::fromStdString( std::to_string( value ) ) );
+	}
 };
 
 #endif //TRIANGLE_PAINTER_PARAMETERSPANEL_H

@@ -31,7 +31,7 @@
       <x>9</x>
       <y>19</y>
       <width>321</width>
-      <height>81</height>
+      <height>107</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
@@ -107,7 +107,7 @@
       <x>9</x>
       <y>19</y>
       <width>321</width>
-      <height>73</height>
+      <height>95</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_2">
@@ -128,7 +128,7 @@
      <item row="1" column="1">
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QRadioButton" name="radioButton">
+        <widget class="QRadioButton" name="constant_light_radio">
          <property name="minimumSize">
           <size>
            <width>154</width>
@@ -147,7 +147,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QRadioButton" name="radioButton_2">
+        <widget class="QRadioButton" name="sphere_light_radio">
          <property name="text">
           <string>Spherical</string>
          </property>
@@ -204,7 +204,7 @@
       </widget>
      </item>
      <item row="0" column="0">
-      <widget class="QRadioButton" name="radioButton_7">
+      <widget class="QRadioButton" name="constant_paint_radio">
        <property name="text">
         <string>Constant</string>
        </property>
@@ -217,7 +217,10 @@
       </widget>
      </item>
      <item row="1" column="0">
-      <widget class="QRadioButton" name="radioButton_8">
+      <widget class="QRadioButton" name="texture_paint_radio">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>Texture</string>
        </property>
@@ -259,7 +262,7 @@
     </property>
     <layout class="QGridLayout" name="gridLayout_4">
      <item row="0" column="0">
-      <widget class="QRadioButton" name="radioButton_3">
+      <widget class="QRadioButton" name="precise_paint_radio">
        <property name="text">
         <string>Precise</string>
        </property>
@@ -272,7 +275,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QRadioButton" name="radioButton_4">
+      <widget class="QRadioButton" name="vertex_paint_radio">
        <property name="text">
         <string>From vertices</string>
        </property>
@@ -307,7 +310,10 @@
     </property>
     <layout class="QGridLayout" name="gridLayout_5">
      <item row="1" column="0">
-      <widget class="QRadioButton" name="radioButton_6">
+      <widget class="QRadioButton" name="texture_n_radio">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>From texture</string>
        </property>
@@ -317,7 +323,7 @@
       </widget>
      </item>
      <item row="0" column="0">
-      <widget class="QRadioButton" name="radioButton_5">
+      <widget class="QRadioButton" name="constantn_radio">
        <property name="text">
         <string>Constant</string>
        </property>
@@ -369,21 +375,36 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QSlider" name="horizontalSlider_2">
+      <widget class="QSlider" name="ks_slider">
+       <property name="maximum">
+        <number>100</number>
+       </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="QSlider" name="horizontalSlider_3">
+      <widget class="QSlider" name="m_slider">
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QSlider" name="horizontalSlider">
+      <widget class="QSlider" name="kd_slider">
+       <property name="minimum">
+        <number>0</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
@@ -404,21 +425,39 @@
       </widget>
      </item>
      <item row="0" column="2">
-      <widget class="QLabel" name="label_10">
+      <widget class="QLabel" name="kd_label">
+       <property name="minimumSize">
+        <size>
+         <width>40</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="text">
         <string>0</string>
        </property>
       </widget>
      </item>
      <item row="1" column="2">
-      <widget class="QLabel" name="label_11">
+      <widget class="QLabel" name="ks_label">
+       <property name="minimumSize">
+        <size>
+         <width>40</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="text">
         <string>0</string>
        </property>
       </widget>
      </item>
      <item row="2" column="2">
-      <widget class="QLabel" name="label_12">
+      <widget class="QLabel" name="m_label">
+       <property name="minimumSize">
+        <size>
+         <width>40</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="text">
         <string>0</string>
        </property>
@@ -431,9 +470,9 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="n_button_group"/>
   <buttongroup name="color_det_button_group"/>
-  <buttongroup name="paint_button_group"/>
+  <buttongroup name="n_button_group"/>
   <buttongroup name="light_button_group"/>
+  <buttongroup name="paint_button_group"/>
  </buttongroups>
 </ui>

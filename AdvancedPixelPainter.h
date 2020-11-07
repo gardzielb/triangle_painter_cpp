@@ -36,7 +36,7 @@ public:
 
 	void paint_pixel( int x, int y ) override
 	{
-		QColor color = settings.image ? settings.image->pixel( x, y ) : settings.fill_color;
+		QColor color = (settings.texture_paint && settings.image) ? settings.image->pixel( x, y ) : settings.fill_color;
 
 //		int normal_light_dot = gbGeo::dot( settings->normal_vector, settings->light_vector );
 //		gbGeo::Vector r_vector = 2 * normal_light_dot * settings->normal_vector - settings->light_vector;

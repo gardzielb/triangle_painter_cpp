@@ -15,6 +15,9 @@ struct PainterSettings
 	float ks = 0.5;
 //	gbGeo::Vector normal_vector;
 //	gbGeo::Vector light_vector;
+	bool spherical_light = false;
+	bool texture_paint = false;
+	bool vertex_interpolation = false;
 	QColor light_color;
 	QColor fill_color;
 	QImage * image = nullptr;
