@@ -8,6 +8,8 @@
 
 #include <QtWidgets/QWidget>
 #include <QObject>
+#include <QtWidgets/QColorDialog>
+#include <QFileDialog>
 #include "ui_parameters.h"
 #include "PainterSettings.h"
 
@@ -27,6 +29,7 @@ signals:
 
 private:
 	Ui_ParametersPanel ui;
+	PainterSettings settings;
 
 	const static int DEFAULT_ROW_COUNT = 10;
 	const static int DEFAULT_COL_COUNT = 10;
@@ -34,7 +37,7 @@ private:
 //	const static QColor DEFAULT_LIGHT_COLOR;
 
 public:
-	ParametersPanel() : ui()
+	ParametersPanel() : ui(), settings()
 	{
 		ui.setupUi( this );
 
@@ -56,10 +59,35 @@ private:
 				[ = ]( int val ) { emit colCountChanged( val ); }
 		);
 		QObject::connect( ui.reset_grid_button, &QPushButton::clicked, [ = ]() { emit gridReset(); } );
+
+		QObject::connect( ui.paint_texture_button, &QPushButton::clicked, this, &ParametersPanel::choose_paint_image );
+		QObject::connect( ui.paint_color_button, &QPushButton::clicked, this, &ParametersPanel::choose_paint_color );
+		QObject::connect( ui.light_color_button, &QPushButton::clicked, this, &ParametersPanel::choose_light_color );
 	}
 
 private slots:
 
+	void choose_light_color()
+	{
+		settings.light_color = QColorDialog::getColor();
+		emit settingsChanged( settings );
+	};
+
+	void choose_paint_color()
+	{
+		settings.fill_color = QColorDialog::getColor();
+		emit settingsChanged( settings );
+	};
+
+	void choose_paint_image()
+	{
+		QString img_file = QFileDialog::getOpenFileName();
+		delete settings.image;
+		auto img = new QImage( img_file );
+		settings.image = new QImage( std::move( img->scaled( 800, 800, Qt::IgnoreAspectRatio ) ) );
+		delete img;
+		emit settingsChanged( settings );
+	};
 };
 
 //const QColor ParametersPanel::DEFAULT_PAINT_COLOR = QColor( 120, 255, 120 );

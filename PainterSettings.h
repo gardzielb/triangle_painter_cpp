@@ -13,11 +13,18 @@ struct PainterSettings
 	int m = 1;
 	float kd = 0.5;
 	float ks = 0.5;
-	gbGeo::Vector * normal_vector = new gbGeo::Vector( { 0, 0, 1 } );
-	gbGeo::Vector * light_vector = new gbGeo::Vector( { 0, 0, 1 } );
-	QColor * light_color = new QColor( 255, 255, 255 );
-	QColor * fill_color = new QColor( 0, 255, 0 );
+//	gbGeo::Vector normal_vector;
+//	gbGeo::Vector light_vector;
+	QColor light_color;
+	QColor fill_color;
 	QImage * image = nullptr;
+
+	PainterSettings()
+			: fill_color( 0, 255, 0 ),
+			  light_color( 255, 255, 255 )
+//			  normal_vector( { 0, 0, 1 } ),
+//			  light_vector( { 0, 0, 1 } )
+	{}
 };
 
 

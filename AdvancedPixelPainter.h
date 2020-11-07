@@ -8,6 +8,7 @@
 
 #include <QtGui/QPainter>
 #include <cmath>
+#include <utility>
 #include "PixelPainter.h"
 #include "PainterSettings.h"
 
@@ -27,15 +28,15 @@ private:
 	PainterSettings settings;
 
 public:
-	explicit AdvancedPixelPainter( QPainter * painter, const PainterSettings settings )
-			: settings( settings )
+	explicit AdvancedPixelPainter( QPainter * painter, PainterSettings settings )
+			: settings( std::move( settings ) )
 	{
 		this->painter = painter;
 	}
 
 	void paint_pixel( int x, int y ) override
 	{
-		QColor color = settings.image ? settings.image->pixel( x, y ) : *settings.fill_color;
+		QColor color = settings.image ? settings.image->pixel( x, y ) : settings.fill_color;
 
 //		int normal_light_dot = gbGeo::dot( settings->normal_vector, settings->light_vector );
 //		gbGeo::Vector r_vector = 2 * normal_light_dot * settings->normal_vector - settings->light_vector;

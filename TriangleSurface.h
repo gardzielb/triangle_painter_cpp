@@ -157,12 +157,6 @@ public:
 		repaint();
 	}
 
-	void change_settings( const PainterSettings & settings )
-	{
-		delete pixel_painter;
-		pixel_painter = new AdvancedPixelPainter( painter, settings );
-	}
-
 	~TriangleSurface() override
 	{
 		delete pixmap;
@@ -186,6 +180,14 @@ public slots:
 		create_triangle_grid();
 	};
 
+	void change_settings( const PainterSettings & settings )
+	{
+		delete polygon_painter;
+		delete pixel_painter;
+		pixel_painter = new AdvancedPixelPainter( painter, settings );
+		polygon_painter = new QtPolygonPainter( painter, pixel_painter );
+		full_repaint();
+	}
 
 private:
 	void paint_pixmap()
