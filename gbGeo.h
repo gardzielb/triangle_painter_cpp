@@ -14,11 +14,9 @@ namespace gbGeo
 	class Vector
 	{
 	private:
-		std::vector<int> * array;
+		std::vector<int> array;
 
 	public:
-		Vector( std::initializer_list<int> in_array );
-
 		explicit Vector( std::vector<int> in_array );
 
 		int size() const;
@@ -30,8 +28,6 @@ namespace gbGeo
 		auto first();
 
 		auto last();
-
-		~Vector();
 	};
 
 	Vector operator*( int a, const Vector & v );

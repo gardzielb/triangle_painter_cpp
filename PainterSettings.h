@@ -13,8 +13,8 @@ struct PainterSettings
 	int m = 1;
 	float kd = 0.5;
 	float ks = 0.5;
-//	gbGeo::Vector normal_vector;
-//	gbGeo::Vector light_vector;
+	gbGeo::Vector normal_vector;
+	gbGeo::Vector light_vector;
 	bool spherical_light = false;
 	bool texture_paint = false;
 	bool vertex_interpolation = false;
@@ -24,9 +24,9 @@ struct PainterSettings
 
 	PainterSettings()
 			: fill_color( 0, 255, 0 ),
-			  light_color( 255, 255, 255 )
-//			  normal_vector( { 0, 0, 1 } ),
-//			  light_vector( { 0, 0, 1 } )
+			  light_color( 255, 255, 255 ),
+			  normal_vector( { 0, 0, 1 } ),
+			  light_vector( { 0, 0, 1 } )
 	{}
 };
 

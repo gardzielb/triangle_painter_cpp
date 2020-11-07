@@ -10,54 +10,42 @@
 
 using namespace gbGeo;
 
-Vector::Vector( std::initializer_list<int> in_array )
-{
-	array = new std::vector<int>( in_array );
-}
-
-Vector::Vector( std::vector<int> in_array )
-{
-	array = new std::vector<int>( std::move( in_array ) );
-}
+Vector::Vector( std::vector<int> in_array ) : array( std::move( in_array ) )
+{}
 
 int Vector::size() const
 {
-	return array->size();
+	return array.size();
 }
 
 auto Vector::first() const
 {
-	return array->cbegin();
+	return array.cbegin();
 }
 
 auto Vector::last() const
 {
-	return array->cend();
+	return array.cend();
 }
 
 auto Vector::first()
 {
-	return array->begin();
+	return array.begin();
 }
 
 auto Vector::last()
 {
-	return array->end();
+	return array.end();
 }
 
-Vector::~Vector()
-{
-	delete array;
-}
-
-Vector operator*( int a, const Vector & v )
+Vector gbGeo::operator*( int a, const Vector & v )
 {
 	std::vector<int> product( v.size() );
 	std::transform( v.first(), v.last(), product.begin(), [ a ]( const int x ) { return a * x; } );
 	return Vector( product );
 }
 
-Vector operator-( const Vector & v1, const Vector & v2 )
+Vector gbGeo::operator-( const Vector & v1, const Vector & v2 )
 {
 	std::vector<int> out( v1.size() );
 	std::transform( v1.first(), v1.last(), v2.first(), out.begin(), std::minus<>() );

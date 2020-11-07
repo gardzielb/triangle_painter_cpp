@@ -47,6 +47,10 @@ public:
 		ui.row_spin->setValue( DEFAULT_ROW_COUNT );
 		ui.col_spin->setValue( DEFAULT_COL_COUNT );
 
+		set_label_text( ui.m_label, ui.m_slider->value() );
+		set_label_text( ui.kd_label, ui.kd_slider->value() );
+		set_label_text( ui.ks_label, ui.ks_slider->value() );
+
 		paint_color_chooser = new ColorButtonWrapper( *ui.paint_color_button, settings.fill_color );
 		light_color_chooser = new ColorButtonWrapper( *ui.light_color_button, settings.light_color );
 

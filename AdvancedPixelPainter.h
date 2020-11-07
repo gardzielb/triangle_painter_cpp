@@ -26,6 +26,7 @@ class AdvancedPixelPainter : public PixelPainter
 private:
 	QPainter * painter = nullptr;
 	PainterSettings settings;
+	const int COLOR_MAX = 255;
 
 public:
 	explicit AdvancedPixelPainter( QPainter * painter, PainterSettings settings )
@@ -38,26 +39,25 @@ public:
 	{
 		QColor color = (settings.texture_paint && settings.image) ? settings.image->pixel( x, y ) : settings.fill_color;
 
-//		int normal_light_dot = gbGeo::dot( settings->normal_vector, settings->light_vector );
-//		gbGeo::Vector r_vector = 2 * normal_light_dot * settings->normal_vector - settings->light_vector;
-//		gbGeo::Vector v_vector = gbGeo::Vector( { 0, 0, 1 } );
-//		int vr_dot = gbGeo::dot( r_vector, v_vector );
-//
-//		int r = compute_color_value(
-//				color.red(), settings->light_color.red(), normal_light_dot, vr_dot, settings->kd, settings->ks,
-//				settings->m
-//		);
-//		int g = compute_color_value(
-//				color.green(), settings->light_color.green(), normal_light_dot, vr_dot, settings->kd, settings->ks,
-//				settings->m
-//		);
-//		int b = compute_color_value(
-//				color.blue(), settings->light_color.blue(), normal_light_dot, vr_dot, settings->kd, settings->ks,
-//				settings->m
-//		);
+		int normal_light_dot = gbGeo::dot( settings.normal_vector, settings.light_vector );
+		gbGeo::Vector r_vector = 2 * normal_light_dot * settings.normal_vector - settings.light_vector;
+		gbGeo::Vector v_vector = gbGeo::Vector( { 0, 0, 1 } );
+		int vr_dot = gbGeo::dot( r_vector, v_vector );
 
-//		painter->setPen( QColor( r, g, b ) );
-		painter->setPen( color );
+		int r = compute_color_value(
+				color.red(), settings.light_color.red(), normal_light_dot, vr_dot, settings.kd, settings.ks,
+				settings.m
+		);
+		int g = compute_color_value(
+				color.green(), settings.light_color.green(), normal_light_dot, vr_dot, settings.kd, settings.ks,
+				settings.m
+		);
+		int b = compute_color_value(
+				color.blue(), settings.light_color.blue(), normal_light_dot, vr_dot, settings.kd, settings.ks,
+				settings.m
+		);
+
+		painter->setPen( QColor( r / COLOR_MAX, g / COLOR_MAX, b / COLOR_MAX ) );
 		painter->drawPoint( x, y );
 	}
 };
