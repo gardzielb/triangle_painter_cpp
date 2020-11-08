@@ -175,7 +175,7 @@ private slots:
 		QString img_file = QFileDialog::getOpenFileName();
 		delete settings.image;
 		auto img = new QImage( img_file );
-		settings.image = new QImage( std::move( img->scaled( 800, 800, Qt::IgnoreAspectRatio ) ) );
+		settings.image = new QImage( std::move( img->scaled( 810, 810, Qt::IgnoreAspectRatio ) ) );
 		delete img;
 		ui.texture_paint_radio->setEnabled( true );
 	}
