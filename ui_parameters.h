@@ -62,8 +62,8 @@ public:
     QWidget *gridLayoutWidget_5;
     QGridLayout *gridLayout_5;
     QRadioButton *texture_n_radio;
-    QRadioButton *constantn_radio;
-    QPushButton *pushButton_2;
+    QRadioButton *constant_n_radio;
+    QPushButton *normal_map_button;
     QGroupBox *groupBox_6;
     QWidget *gridLayoutWidget_6;
     QGridLayout *gridLayout_6;
@@ -253,17 +253,17 @@ public:
 
         gridLayout_5->addWidget(texture_n_radio, 1, 0, 1, 1);
 
-        constantn_radio = new QRadioButton(gridLayoutWidget_5);
-        n_button_group->addButton(constantn_radio);
-        constantn_radio->setObjectName(QStringLiteral("constantn_radio"));
-        constantn_radio->setChecked(true);
+        constant_n_radio = new QRadioButton(gridLayoutWidget_5);
+        n_button_group->addButton(constant_n_radio);
+        constant_n_radio->setObjectName(QStringLiteral("constant_n_radio"));
+        constant_n_radio->setChecked(true);
 
-        gridLayout_5->addWidget(constantn_radio, 0, 0, 1, 1);
+        gridLayout_5->addWidget(constant_n_radio, 0, 0, 1, 1);
 
-        pushButton_2 = new QPushButton(gridLayoutWidget_5);
-        pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
+        normal_map_button = new QPushButton(gridLayoutWidget_5);
+        normal_map_button->setObjectName(QStringLiteral("normal_map_button"));
 
-        gridLayout_5->addWidget(pushButton_2, 1, 1, 1, 1);
+        gridLayout_5->addWidget(normal_map_button, 1, 1, 1, 1);
 
         groupBox_6 = new QGroupBox(ParametersPanel);
         groupBox_6->setObjectName(QStringLiteral("groupBox_6"));
@@ -360,8 +360,8 @@ public:
         vertex_paint_radio->setText(QApplication::translate("ParametersPanel", "From vertices", nullptr));
         groupBox_4->setTitle(QApplication::translate("ParametersPanel", "N vector", nullptr));
         texture_n_radio->setText(QApplication::translate("ParametersPanel", "From texture", nullptr));
-        constantn_radio->setText(QApplication::translate("ParametersPanel", "Constant", nullptr));
-        pushButton_2->setText(QApplication::translate("ParametersPanel", "Choose", nullptr));
+        constant_n_radio->setText(QApplication::translate("ParametersPanel", "Constant", nullptr));
+        normal_map_button->setText(QApplication::translate("ParametersPanel", "Choose", nullptr));
         groupBox_6->setTitle(QApplication::translate("ParametersPanel", "Parameters", nullptr));
         label_9->setText(QApplication::translate("ParametersPanel", "m", nullptr));
         label_8->setText(QApplication::translate("ParametersPanel", "ks", nullptr));

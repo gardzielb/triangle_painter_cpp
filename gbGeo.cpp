@@ -10,7 +10,7 @@
 
 using namespace gbGeo;
 
-Vector::Vector( std::vector<int> in_array ) : array( std::move( in_array ) )
+Vector::Vector( std::vector<float> in_array ) : array( std::move( in_array ) )
 {}
 
 int Vector::size() const
@@ -38,23 +38,55 @@ auto Vector::last()
 	return array.end();
 }
 
-Vector gbGeo::operator*( int a, const Vector & v )
+float Vector::norm() const
 {
-	std::vector<int> product( v.size() );
-	std::transform( v.first(), v.last(), product.begin(), [ a ]( const int x ) { return a * x; } );
+	return sqrt( std::inner_product( first(), last(), first(), 0.0f ) );
+}
+
+void Vector::normalize()
+{
+	float norm = this->norm();
+	std::transform( array.begin(), array.end(), array.begin(), [ = ]( float x ) { return x / norm; } );
+}
+
+Vector Vector::normalized() const
+{
+	std::vector<float> nv( this->size() );
+	float norm = this->norm();
+	std::transform( this->first(), this->last(), nv.begin(), [ = ]( float x ) { return x / norm; } );
+	return Vector( nv );
+}
+
+std::string Vector::to_str()
+{
+	std::string str = "[";
+	for ( auto x : array )
+	{
+		str.append( std::to_string( x ) );
+		str.append( "," );
+	}
+	str.erase( str.end() - 1 );
+	str.append( "]" );
+	return str;
+}
+
+Vector gbGeo::operator*( float a, const Vector & v )
+{
+	std::vector<float> product( v.size() );
+	std::transform( v.first(), v.last(), product.begin(), [ a ]( const float x ) { return a * x; } );
 	return Vector( product );
 }
 
 Vector gbGeo::operator-( const Vector & v1, const Vector & v2 )
 {
-	std::vector<int> out( v1.size() );
+	std::vector<float> out( v1.size() );
 	std::transform( v1.first(), v1.last(), v2.first(), out.begin(), std::minus<>() );
 	return Vector( out );
 }
 
-int gbGeo::dot( Vector v1, Vector v2 )
+float gbGeo::dot( Vector v1, Vector v2 )
 {
-	return std::inner_product( v1.first(), v1.last(), v2.first(), 0 );
+	return std::inner_product( v1.first(), v1.last(), v2.first(), 0.0f );
 }
 
 float gbGeo::line_length( int x1, int y1, int x2, int y2 )

@@ -14,10 +14,16 @@ namespace gbGeo
 	class Vector
 	{
 	private:
-		std::vector<int> array;
+		std::vector<float> array;
 
 	public:
-		explicit Vector( std::vector<int> in_array );
+		explicit Vector( std::vector<float> in_array );
+
+		float norm() const;
+
+		void normalize();
+
+		Vector normalized() const;
 
 		int size() const;
 
@@ -28,13 +34,15 @@ namespace gbGeo
 		auto first();
 
 		auto last();
+
+		std::string to_str();
 	};
 
-	Vector operator*( int a, const Vector & v );
+	Vector operator*( float a, const Vector & v );
 
 	Vector operator-( const Vector & v1, const Vector & v2 );
 
-	int dot( Vector v1, Vector v2 );
+	float dot( Vector v1, Vector v2 );
 
 	float line_length( int x1, int y1, int x2, int y2 );
 

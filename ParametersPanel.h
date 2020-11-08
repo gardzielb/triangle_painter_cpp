@@ -79,7 +79,9 @@ private:
 		);
 		QObject::connect( ui.reset_grid_button, &QPushButton::clicked, [ = ]() { emit gridReset(); } );
 
-		QObject::connect( ui.paint_texture_button, &QPushButton::clicked, this, &ParametersPanel::choose_paint_image );
+		QObject::connect( ui.paint_texture_button, &QPushButton::clicked, this, &ParametersPanel::load_paint_image );
+		QObject::connect( ui.normal_map_button, &QPushButton::clicked, this, &ParametersPanel::load_normal_map );
+
 		QObject::connect(
 				paint_color_chooser, &ColorButtonWrapper::colorChosen, this, &ParametersPanel::change_paint_color
 		);
@@ -138,6 +140,14 @@ private:
 				ui.vertex_paint_radio, &QRadioButton::clicked,
 				[ = ]( bool checked ) { change_radio_param( &settings.vertex_interpolation, checked ); }
 		);
+		QObject::connect(
+				ui.constant_n_radio, &QRadioButton::clicked,
+				[ = ]( bool checked ) { change_radio_param( &settings.texture_normal_map, !checked ); }
+		);
+		QObject::connect(
+				ui.texture_n_radio, &QRadioButton::clicked,
+				[ = ]( bool checked ) { change_radio_param( &settings.texture_normal_map, checked ); }
+		);
 	}
 
 private slots:
@@ -160,7 +170,7 @@ private slots:
 		emit settingsChanged( settings );
 	}
 
-	void choose_paint_image()
+	void load_paint_image()
 	{
 		QString img_file = QFileDialog::getOpenFileName();
 		delete settings.image;
@@ -168,8 +178,17 @@ private slots:
 		settings.image = new QImage( std::move( img->scaled( 800, 800, Qt::IgnoreAspectRatio ) ) );
 		delete img;
 		ui.texture_paint_radio->setEnabled( true );
-		emit settingsChanged( settings );
-	};
+	}
+
+	void load_normal_map()
+	{
+		QString img_file = QFileDialog::getOpenFileName();
+		delete settings.normal_map;
+		auto img = new QImage( img_file );
+		settings.normal_map = new NormalMap( img->scaled( 810, 810, Qt::IgnoreAspectRatio ) );
+		delete img;
+		ui.texture_n_radio->setEnabled( true );
+	}
 
 	void change_slider_param( int * param, int value )
 	{

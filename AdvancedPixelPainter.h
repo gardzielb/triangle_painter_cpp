@@ -12,7 +12,7 @@
 #include "PixelPainter.h"
 #include "PainterSettings.h"
 
-int compute_color_value( int color, int light, int normal_light_dot, int vr_dot, float kd, float ks, int m )
+int compute_color_value( int color, int light, float normal_light_dot, float vr_dot, float kd, float ks, int m )
 {
 	int color_light_prod = light * color;
 	float d = kd * (float) color_light_prod * (float) normal_light_dot;
@@ -38,11 +38,16 @@ public:
 	void paint_pixel( int x, int y ) override
 	{
 		QColor color = (settings.texture_paint && settings.image) ? settings.image->pixel( x, y ) : settings.fill_color;
+		gbGeo::Vector & n_vector = settings.default_normal_vector;
+		if ( settings.texture_normal_map && settings.normal_map )
+		{
+			n_vector = (*settings.normal_map)[x][y];
+		}
 
-		int normal_light_dot = gbGeo::dot( settings.normal_vector, settings.light_vector );
-		gbGeo::Vector r_vector = 2 * normal_light_dot * settings.normal_vector - settings.light_vector;
+		float normal_light_dot = gbGeo::dot( n_vector, settings.default_light_vector );
+		gbGeo::Vector r_vector = 2 * normal_light_dot * n_vector - settings.default_light_vector;
 		gbGeo::Vector v_vector = gbGeo::Vector( { 0, 0, 1 } );
-		int vr_dot = gbGeo::dot( r_vector, v_vector );
+		float vr_dot = gbGeo::dot( v_vector, r_vector );
 
 		int r = compute_color_value(
 				color.red(), settings.light_color.red(), normal_light_dot, vr_dot, settings.kd, settings.ks,
@@ -56,6 +61,12 @@ public:
 				color.blue(), settings.light_color.blue(), normal_light_dot, vr_dot, settings.kd, settings.ks,
 				settings.m
 		);
+
+//		if ( settings.texture_normal_map &&
+//			 (r < 0 || r > 255 * 255 || g < 0 || g > 255 * 255 || b < 0 || b > 255 * 255) )
+//		{
+//			printf( "Color = (%d, %d, %d)\n", r / COLOR_MAX, g / COLOR_MAX, b / COLOR_MAX );
+//		}
 
 		painter->setPen( QColor( r / COLOR_MAX, g / COLOR_MAX, b / COLOR_MAX ) );
 		painter->drawPoint( x, y );
