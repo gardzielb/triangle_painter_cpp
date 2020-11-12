@@ -6,6 +6,7 @@
 #define TRIANGLE_PAINTER_TRIANGLESURFACE_H
 
 
+#include <QThread>
 #include <QtWidgets/QWidget>
 #include <QMouseEvent>
 #include <utility>
@@ -16,6 +17,27 @@
 #include "SurfacePainter.h"
 #include "FillTriangleStrategy.h"
 #include "SurfacePainterFactory.h"
+#include "LightAnimation.h"
+
+
+//class PaintingThread : public QThread
+//{
+//private:
+//	SurfacePainter * painter = nullptr;
+//	std::list<Polygon *> & paint_list;
+//
+//public:
+//	PaintingThread( SurfacePainter * painter, std::list<Polygon *> & paint_list ) : paint_list( paint_list )
+//	{
+//		this->painter = painter;
+//	}
+//
+//	void run() override
+//	{
+//		painter->paint_triangles( paint_list );
+//	}
+//};
+
 
 class TriangleSurface : public QWidget
 {
@@ -60,7 +82,7 @@ public:
 
 	void paintEvent( QPaintEvent * event ) override
 	{
-		background_painter->paint_on_device( main_painter->device() );
+		background_painter->paint_on_device( main_painter->get_image() );
 		main_painter->paint_triangles( active_triangles );
 
 		if ( active_point )
@@ -82,12 +104,13 @@ public:
 			triangle_paint_list.remove( triangle );
 		}
 
-		background_painter->paint_triangles( triangle_paint_list );
+		full_repaint();
 	}
 
 	void mouseReleaseEvent( QMouseEvent * event ) override
 	{
 		is_mouse_pressed = false;
+
 		for ( auto triangle : active_triangles )
 		{
 			triangle_paint_list.push_back( triangle );
@@ -98,8 +121,7 @@ public:
 		active_row = -1;
 		active_col = -1;
 
-		background_painter->paint_triangles( triangle_paint_list );
-		repaint();
+		full_repaint();
 	}
 
 	void mouseMoveEvent( QMouseEvent * event ) override
@@ -112,30 +134,47 @@ public:
 			{
 				triangle->update();
 			}
-			repaint();
-			return;
-		}
-
-		active_point = nullptr;
-		active_row = -1;
-		active_col = -1;
-		for ( int i = 0; i < row_count + 1; i++ )
+		} else
 		{
-			for ( int j = 0; j < col_count + 1; j++ )
+			active_point = nullptr;
+			active_row = -1;
+			active_col = -1;
+			for ( int i = 0; i < row_count + 1; i++ )
 			{
-				QPoint * p = grid->point( i, j );
-				if ( gbGeo::line_length( p->x(), p->y(), event->x(), event->y() ) <= POINT_HIT_RADIUS )
+				for ( int j = 0; j < col_count + 1; j++ )
 				{
-					active_point = p;
-					active_row = i;
-					active_col = j;
-					break;
+					QPoint * p = grid->point( i, j );
+					if ( gbGeo::line_length( p->x(), p->y(), event->x(), event->y() ) <= POINT_HIT_RADIUS )
+					{
+						active_point = p;
+						active_row = i;
+						active_col = j;
+						break;
+					}
 				}
+				if ( active_point ) break;
 			}
-			if ( active_point ) break;
 		}
 
 		repaint();
+	}
+
+	void full_repaint()
+	{
+		background_painter->paint_triangles( triangle_paint_list );
+		repaint();
+//		auto worker = new PaintingThread( background_painter, triangle_paint_list );
+//		QObject::connect( worker, &QThread::finished, [ = ]() {
+//			this->repaint();
+//			this->paint_mutex->unlock();
+//			this->paint_list_mutex->unlock();
+//			worker->deleteLater();
+//		} );
+//		if ( paint_mutex->tryLock() )
+//		{
+//			paint_list_mutex->lock();
+//			worker->start();
+//		}
 	}
 
 	void create_triangle_grid()
@@ -156,8 +195,7 @@ public:
 			}
 		}
 
-		background_painter->paint_triangles( triangle_paint_list );
-		repaint();
+		full_repaint();
 	}
 
 	~TriangleSurface() override
@@ -182,8 +220,7 @@ public slots:
 	{
 		main_painter = main_painter_factory->create_painter( settings );
 		background_painter = background_painter_factory->create_painter( settings );
-		background_painter->paint_triangles( triangle_paint_list );
-		repaint();
+		full_repaint();
 	}
 
 private:

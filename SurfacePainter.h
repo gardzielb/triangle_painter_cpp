@@ -7,6 +7,7 @@
 
 #include <QPainter>
 #include <QPaintDevice>
+#include <QtCore/QMutex>
 #include "Polygon.h"
 #include "PixelPainter.h"
 #include "PaintCommand.h"
@@ -32,7 +33,7 @@ public:
 		this->image = image;
 	}
 
-	QPaintDevice * device()
+	QImage * get_image()
 	{
 		return image;
 	}

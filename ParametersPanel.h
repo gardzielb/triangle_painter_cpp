@@ -29,6 +29,8 @@ signals:
 
 	void settingsChanged( PainterSettings & settings );
 
+	void lightChanged( PainterSettings & settings );
+
 private:
 	Ui_ParametersPanel ui;
 	PainterSettings settings;
@@ -128,11 +130,11 @@ private:
 		);
 		QObject::connect(
 				ui.constant_light_radio, &QRadioButton::clicked,
-				[ = ]( bool checked ) { change_radio_param( &settings.spherical_light, !checked ); }
+				[ = ]( bool checked ) { change_light_source( !checked ); }
 		);
 		QObject::connect(
 				ui.sphere_light_radio, &QRadioButton::clicked,
-				[ = ]( bool checked ) { change_radio_param( &settings.spherical_light, checked ); }
+				[ = ]( bool checked ) { change_light_source( checked ); }
 		);
 		QObject::connect(
 				ui.precise_paint_radio, &QRadioButton::clicked,
@@ -153,6 +155,16 @@ private:
 	}
 
 private slots:
+
+	void change_light_source( bool spherical )
+	{
+		settings.spherical_light = spherical;
+		if ( spherical )
+		{
+			settings.light_position = new gbGeo::Vector3( 0, 0, 0 );
+		}
+		emit lightChanged( settings );
+	};
 
 	void change_light_color( const QColor & color )
 	{

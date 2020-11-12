@@ -13,7 +13,7 @@ namespace gbGeo
 {
 	class Vector
 	{
-	private:
+	protected:
 		std::vector<float> array;
 
 	public:
@@ -36,6 +36,24 @@ namespace gbGeo
 		auto last();
 
 		std::string to_str();
+	};
+
+	class Vector3 : public Vector
+	{
+	public:
+		Vector3( float x, float y, float z );
+
+		float x();
+
+		void setX( float x );
+
+		float y();
+
+		void setY( float y );
+
+		float z();
+
+		void setZ( float z );
 	};
 
 	Vector operator*( float a, const Vector & v );

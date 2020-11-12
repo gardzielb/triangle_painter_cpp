@@ -45,8 +45,17 @@ public:
 			n_vector = (*settings.normal_map)[x][y];
 		}
 
-		float normal_light_dot = gbGeo::dot( n_vector, settings.default_light_vector );
-		gbGeo::Vector r_vector = 2 * normal_light_dot * n_vector - settings.default_light_vector;
+		gbGeo::Vector & light_vector = settings.default_light_vector;
+		if ( settings.spherical_light && settings.light_position )
+		{
+			light_vector = gbGeo::Vector3(
+					settings.light_position->x() - x, settings.light_position->y() - y, settings.light_position->z()
+			);
+			light_vector.normalize();
+		}
+
+		float normal_light_dot = gbGeo::dot( n_vector, light_vector );
+		gbGeo::Vector r_vector = 2 * normal_light_dot * n_vector - light_vector;
 		gbGeo::Vector v_vector = gbGeo::Vector( { 0, 0, 1 } );
 		float vr_dot = gbGeo::dot( v_vector, r_vector );
 

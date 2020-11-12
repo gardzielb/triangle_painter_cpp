@@ -6,6 +6,8 @@
 #define TRIANGLE_PAINTER_PAINTERSETTINGS_H
 
 
+#include <QtGui/QImage>
+#include <QtCore/QMutex>
 #include "gbGeo.h"
 
 
@@ -39,10 +41,12 @@ public:
 
 struct PainterSettings
 {
+	QMutex * mutex = new QMutex();
 	int m = 1;
 	float kd = 0.5;
 	float ks = 0.5;
 	bool spherical_light = false;
+	gbGeo::Vector3 * light_position = nullptr;
 	gbGeo::Vector default_light_vector;
 	QColor light_color;
 	bool texture_paint = false;

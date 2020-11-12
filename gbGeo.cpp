@@ -103,3 +103,36 @@ std::pair<float, int> gbGeo::line_equation( int x1, int y1, int x2, int y2 )
 	int b = y1 - a * x1;
 	return std::make_pair( a, b );
 }
+
+Vector3::Vector3( float x, float y, float z ) : Vector( { x, y, z } )
+{}
+
+float Vector3::x()
+{
+	return array[0];
+}
+
+void Vector3::setX( float x )
+{
+	array[0] = x;
+}
+
+float Vector3::y()
+{
+	return array[0];
+}
+
+void Vector3::setY( float y )
+{
+	array[1] = y;
+}
+
+float Vector3::z()
+{
+	return array[0];
+}
+
+void Vector3::setZ( float z )
+{
+	array[2] = z;
+}
