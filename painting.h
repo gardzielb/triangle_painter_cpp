@@ -8,7 +8,7 @@
 #include <QtCore/QPoint>
 #include <list>
 #include "gbGeo.h"
-#include "PolygonPainter.h"
+#include "PixelPainter.h"
 
 struct ActiveEdge
 {
@@ -40,22 +40,22 @@ void update_aet( std::list<ActiveEdge> & aet, int y )
 	aet.sort( []( const ActiveEdge & e1, const ActiveEdge & e2 ) { return e1.x <= e2.x; } );
 }
 
-std::pair<QPoint, QPoint> find_neighbors( int index, std::vector<QPoint *> & vertices )
+std::pair<QPoint, QPoint> find_neighbors( int index, const std::vector<QPoint *> & vertices )
 {
 	int i_prev = index ? (index - 1) : vertices.size() - 1;
 	int i_next = (index + 1) % vertices.size();
 	return std::make_pair( *vertices[i_prev], *vertices[i_next] );
 }
 
-void paint_scan_line( int x1, int x2, int y, PolygonPainter * painter )
+void paint_scan_line( int x1, int x2, int y, PixelPainter * painter )
 {
 	for ( int x = x1; x < x2 + 1; x++ )
 	{
-		painter->fill_pixel( x, y );
+		painter->paint_pixel( x, y );
 	}
 }
 
-void fill_polygon( std::vector<QPoint *> & vertices, std::vector<int> & indexes, PolygonPainter * painter )
+void fill_polygon( const std::vector<QPoint *> & vertices, std::vector<int> & indexes, PixelPainter * painter )
 {
 	int v_count = vertices.size();
 	std::list<ActiveEdge> aet;

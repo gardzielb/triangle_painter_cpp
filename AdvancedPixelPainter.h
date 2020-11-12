@@ -11,6 +11,7 @@
 #include <utility>
 #include "PixelPainter.h"
 #include "PainterSettings.h"
+#include "PaintCommand.h"
 
 int compute_color_value( int color, int light, float normal_light_dot, float vr_dot, float kd, float ks, int m )
 {
@@ -24,15 +25,15 @@ int compute_color_value( int color, int light, float normal_light_dot, float vr_
 class AdvancedPixelPainter : public PixelPainter
 {
 private:
-	QPainter * painter = nullptr;
+	PaintCommand * paint_command = nullptr;
 	PainterSettings settings;
 	const int COLOR_MAX = 255;
 
 public:
-	explicit AdvancedPixelPainter( QPainter * painter, PainterSettings settings )
+	explicit AdvancedPixelPainter( PaintCommand * paint_command, PainterSettings settings )
 			: settings( std::move( settings ) )
 	{
-		this->painter = painter;
+		this->paint_command = paint_command;
 	}
 
 	void paint_pixel( int x, int y ) override
@@ -62,14 +63,8 @@ public:
 				settings.m
 		);
 
-//		if ( settings.texture_normal_map &&
-//			 (r < 0 || r > 255 * 255 || g < 0 || g > 255 * 255 || b < 0 || b > 255 * 255) )
-//		{
-//			printf( "Color = (%d, %d, %d)\n", r / COLOR_MAX, g / COLOR_MAX, b / COLOR_MAX );
-//		}
-
-		painter->setPen( QColor( r / COLOR_MAX, g / COLOR_MAX, b / COLOR_MAX ) );
-		painter->drawPoint( x, y );
+		QColor pixel_color( r / COLOR_MAX, g / COLOR_MAX, b / COLOR_MAX );
+		paint_command->execute( x, y, pixel_color );
 	}
 };
 

@@ -9,10 +9,13 @@
 #include <QtWidgets/QWidget>
 #include <QMouseEvent>
 #include <utility>
-#include "PolygonPainter.h"
-#include "QtPolygonPainter.h"
+#include <QtCore/QTime>
 #include "AdvancedPixelPainter.h"
 #include "Polygon.h"
+#include "BarycentricPixelPainter.h"
+#include "SurfacePainter.h"
+#include "FillTriangleStrategy.h"
+#include "SurfacePainterFactory.h"
 
 class TriangleSurface : public QWidget
 {
@@ -21,10 +24,10 @@ public:
 	const static int DEFAULT_HEIGHT = 800;
 
 private:
-	QPainter * painter = nullptr;
-	PixelPainter * pixel_painter = nullptr;
-	PolygonPainter * polygon_painter = nullptr;
-	QPixmap * pixmap = nullptr;
+	SurfacePainter * main_painter = nullptr;
+	SurfacePainter * background_painter = nullptr;
+	SurfacePainterFactory * main_painter_factory = nullptr;
+	SurfacePainterFactory * background_painter_factory = nullptr;
 
 	int row_count;
 	int col_count;
@@ -35,8 +38,6 @@ private:
 	int active_col = -1;
 	std::list<Polygon *> active_triangles;
 	std::list<Polygon *> triangle_paint_list;
-
-	bool draw_borders = true;
 	bool is_mouse_pressed = false;
 
 	const int POINT_HIT_RADIUS = 5;
@@ -46,11 +47,12 @@ public:
 			: row_count( row_count ), col_count( col_count )
 	{
 		setFixedSize( DEFAULT_WIDTH, DEFAULT_HEIGHT );
-		pixmap = new QPixmap( width(), height() );
 
-		painter = new QPainter();
-		pixel_painter = new AdvancedPixelPainter( painter, PainterSettings() );
-		polygon_painter = new QtPolygonPainter( painter, pixel_painter );
+		main_painter_factory = new ImageSurfacePainterFactory( width(), height() );
+		background_painter_factory = new ImageSurfacePainterFactory( width(), height() );
+		PainterSettings settings;
+		main_painter = main_painter_factory->create_painter( settings );
+		background_painter = background_painter_factory->create_painter( settings );
 
 		create_triangle_grid();
 		setMouseTracking( true );
@@ -58,16 +60,15 @@ public:
 
 	void paintEvent( QPaintEvent * event ) override
 	{
-		painter->begin( this );
-		painter->drawPixmap( rect(), *pixmap );
-		paint_triangles( &active_triangles );
+		background_painter->paint_on_device( main_painter->device() );
+		main_painter->paint_triangles( active_triangles );
 
 		if ( active_point )
 		{
-			polygon_painter->draw_active_point( active_point->x(), active_point->y(), POINT_HIT_RADIUS );
+			main_painter->paint_active_point( active_point->x(), active_point->y(), POINT_HIT_RADIUS );
 		}
 
-		painter->end();
+		main_painter->paint_on_device( this );
 	}
 
 	void mousePressEvent( QMouseEvent * event ) override
@@ -81,7 +82,7 @@ public:
 			triangle_paint_list.remove( triangle );
 		}
 
-		full_repaint();
+		background_painter->paint_triangles( triangle_paint_list );
 	}
 
 	void mouseReleaseEvent( QMouseEvent * event ) override
@@ -91,11 +92,14 @@ public:
 		{
 			triangle_paint_list.push_back( triangle );
 		}
+
 		active_triangles.clear();
 		active_point = nullptr;
 		active_row = -1;
 		active_col = -1;
-		full_repaint();
+
+		background_painter->paint_triangles( triangle_paint_list );
+		repaint();
 	}
 
 	void mouseMoveEvent( QMouseEvent * event ) override
@@ -152,72 +156,37 @@ public:
 			}
 		}
 
-		full_repaint();
-	}
-
-	void full_repaint()
-	{
-		paint_pixmap();
+		background_painter->paint_triangles( triangle_paint_list );
 		repaint();
 	}
 
 	~TriangleSurface() override
 	{
-		delete pixmap;
-		delete polygon_painter;
-		delete pixel_painter;
-		delete painter;
+		delete main_painter_factory;
+		delete background_painter_factory;
+		delete main_painter;
+		delete background_painter;
 		delete grid;
 	}
 
 public slots:
 
-	void change_row_count( int rows )
+	void reset_grid( int rows, int cols )
 	{
 		row_count = rows;
-		create_triangle_grid();
-	};
-
-	void change_column_count( int cols )
-	{
 		col_count = cols;
 		create_triangle_grid();
 	};
 
 	void change_settings( const PainterSettings & settings )
 	{
-		delete polygon_painter;
-		delete pixel_painter;
-		pixel_painter = new AdvancedPixelPainter( painter, settings );
-		polygon_painter = new QtPolygonPainter( painter, pixel_painter );
-		full_repaint();
+		main_painter = main_painter_factory->create_painter( settings );
+		background_painter = background_painter_factory->create_painter( settings );
+		background_painter->paint_triangles( triangle_paint_list );
+		repaint();
 	}
 
 private:
-	void paint_pixmap()
-	{
-		pixmap->fill( QColor( 255, 255, 255 ) );
-		painter->begin( pixmap );
-		paint_triangles( &triangle_paint_list );
-		painter->end();
-	}
-
-	void paint_triangles( std::list<Polygon *> * paint_list )
-	{
-		for ( auto triangle : *paint_list )
-		{
-			triangle->fill( polygon_painter );
-		}
-
-		if ( draw_borders )
-		{
-			for ( auto triangle : *paint_list )
-			{
-				triangle->draw_border( polygon_painter );
-			}
-		}
-	}
-
 	void find_active_triangles( int row, int col )
 	{
 		if ( row && col )

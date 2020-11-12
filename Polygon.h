@@ -10,13 +10,14 @@
 #include <vector>
 #include <QtCore/QPoint>
 #include <QtGui/QPainterPath>
-#include "PolygonPainter.h"
 #include "painting.h"
 
 class Polygon
 {
 private:
 	std::vector<QPoint *> vertices;
+	float bar_denominator = 1;
+	float bar_values[4] = { 0 };
 
 public:
 	explicit Polygon( std::vector<QPoint *> vertices ) : vertices( std::move( vertices ) )
@@ -24,18 +25,38 @@ public:
 		update();
 	}
 
-	void draw_border( PolygonPainter * painter )
+	const std::vector<QPoint *> & get_vertices() const
+	{
+		return vertices;
+	}
+
+	bool has_vertex( int x, int y ) const
+	{
+		return std::any_of( vertices.cbegin(), vertices.cend(),
+							[ = ]( const QPoint * v ) { return v->x() == x && v->y() == y; }
+		);
+	}
+
+	std::tuple<float, float, float> barycentric_coordinates( int x, int y ) const
+	{
+		float w1 = (bar_values[0] * (x - vertices[2]->x()) + bar_values[1] * (y - vertices[2]->y())) / bar_denominator;
+		float w2 = (bar_values[2] * (x - vertices[2]->x()) + bar_values[3] * (y - vertices[2]->y())) / bar_denominator;
+		float w3 = 1 - w1 - w2;
+		return std::make_tuple( w1, w2, w3 );
+	}
+
+	void draw_border( QPainter * painter ) const
 	{
 		for ( int i = 0; i < vertices.size(); i++ )
 		{
 			int i2 = (i + 1) % vertices.size();
 			QPoint * p1 = vertices[i];
 			QPoint * p2 = vertices[i2];
-			painter->draw_line( p1->x(), p1->y(), p2->x(), p2->y() );
+			painter->drawLine( p1->x(), p1->y(), p2->x(), p2->y() );
 		}
 	}
 
-	void fill( PolygonPainter * painter )
+	void fill( PixelPainter * painter ) const
 	{
 		std::vector<int> indexes( { 0, 1, 2 } );
 		fill_polygon( vertices, indexes, painter );
@@ -47,6 +68,11 @@ public:
 				vertices.begin(), vertices.end(),
 				[]( const QPoint * p1, const QPoint * p2 ) { return p1->y() <= p2->y(); }
 		);
+		bar_values[0] = vertices[1]->y() - vertices[2]->y();
+		bar_values[1] = vertices[2]->x() - vertices[1]->x();
+		bar_values[2] = vertices[2]->y() - vertices[0]->y();
+		bar_values[3] = vertices[0]->x() - vertices[2]->x();
+		bar_denominator = bar_values[0] * bar_values[3] + bar_values[1] * (-1) * bar_values[2];
 	}
 
 	bool operator==( const Polygon & other )

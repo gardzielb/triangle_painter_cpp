@@ -45,14 +45,7 @@ private:
 	void connect_signals()
 	{
 		QObject::connect(
-				params_panel, &ParametersPanel::rowCountChanged, triangle_surface, &TriangleSurface::change_row_count
-		);
-
-		QObject::connect(
-				params_panel, &ParametersPanel::colCountChanged, triangle_surface, &TriangleSurface::change_column_count
-		);
-		QObject::connect(
-				params_panel, &ParametersPanel::gridReset, triangle_surface, &TriangleSurface::create_triangle_grid
+				params_panel, &ParametersPanel::gridReset, triangle_surface, &TriangleSurface::reset_grid
 		);
 		QObject::connect(
 				params_panel, &ParametersPanel::settingsChanged, triangle_surface, &TriangleSurface::change_settings

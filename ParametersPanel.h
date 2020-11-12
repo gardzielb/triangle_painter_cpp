@@ -22,11 +22,10 @@ Q_OBJECT
 
 signals:
 
-	void rowCountChanged( int row_count );
+//	void rowCountChanged( int row_count );
+//	void colCountChanged( int col_count );
 
-	void colCountChanged( int col_count );
-
-	void gridReset();
+	void gridReset( int row_count, int col_count );
 
 	void settingsChanged( PainterSettings & settings );
 
@@ -69,15 +68,18 @@ public:
 private:
 	void connect_signals()
 	{
+//		QObject::connect(
+//				ui.row_spin, QOverload<int>::of( &QSpinBox::valueChanged ),
+//				[ = ]( int val ) { emit rowCountChanged( val ); }
+//		);
+//		QObject::connect(
+//				ui.col_spin, QOverload<int>::of( &QSpinBox::valueChanged ),
+//				[ = ]( int val ) { emit colCountChanged( val ); }
+//		);
 		QObject::connect(
-				ui.row_spin, QOverload<int>::of( &QSpinBox::valueChanged ),
-				[ = ]( int val ) { emit rowCountChanged( val ); }
+				ui.reset_grid_button, &QPushButton::clicked,
+				[ = ]() { emit gridReset( ui.row_spin->value(), ui.col_spin->value() ); }
 		);
-		QObject::connect(
-				ui.col_spin, QOverload<int>::of( &QSpinBox::valueChanged ),
-				[ = ]( int val ) { emit colCountChanged( val ); }
-		);
-		QObject::connect( ui.reset_grid_button, &QPushButton::clicked, [ = ]() { emit gridReset(); } );
 
 		QObject::connect( ui.paint_texture_button, &QPushButton::clicked, this, &ParametersPanel::load_paint_image );
 		QObject::connect( ui.normal_map_button, &QPushButton::clicked, this, &ParametersPanel::load_normal_map );
