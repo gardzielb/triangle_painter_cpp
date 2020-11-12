@@ -20,7 +20,6 @@
 #include <QtWidgets/QRadioButton>
 #include <QtWidgets/QSlider>
 #include <QtWidgets/QSpinBox>
-#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -40,12 +39,11 @@ public:
     QGroupBox *groupBox_2;
     QWidget *gridLayoutWidget_2;
     QGridLayout *gridLayout_2;
-    QLabel *label_4;
-    QLabel *label_3;
-    QVBoxLayout *verticalLayout;
     QRadioButton *constant_light_radio;
-    QRadioButton *sphere_light_radio;
+    QLabel *label_3;
     QPushButton *light_color_button;
+    QRadioButton *sphere_light_radio;
+    QLabel *label_4;
     QGroupBox *groupBox_3;
     QWidget *gridLayoutWidget_3;
     QGridLayout *gridLayout_3;
@@ -85,10 +83,11 @@ public:
     {
         if (ParametersPanel->objectName().isEmpty())
             ParametersPanel->setObjectName(QStringLiteral("ParametersPanel"));
-        ParametersPanel->resize(362, 816);
+        ParametersPanel->resize(362, 800);
+        ParametersPanel->setMaximumSize(QSize(16777215, 800));
         groupBox = new QGroupBox(ParametersPanel);
         groupBox->setObjectName(QStringLiteral("groupBox"));
-        groupBox->setGeometry(QRect(10, 10, 341, 111));
+        groupBox->setGeometry(QRect(10, 10, 341, 131));
         gridLayoutWidget = new QWidget(groupBox);
         gridLayoutWidget->setObjectName(QStringLiteral("gridLayoutWidget"));
         gridLayoutWidget->setGeometry(QRect(9, 19, 321, 107));
@@ -132,25 +131,13 @@ public:
 
         groupBox_2 = new QGroupBox(ParametersPanel);
         groupBox_2->setObjectName(QStringLiteral("groupBox_2"));
-        groupBox_2->setGeometry(QRect(10, 130, 341, 101));
+        groupBox_2->setGeometry(QRect(10, 150, 341, 131));
         gridLayoutWidget_2 = new QWidget(groupBox_2);
         gridLayoutWidget_2->setObjectName(QStringLiteral("gridLayoutWidget_2"));
-        gridLayoutWidget_2->setGeometry(QRect(9, 19, 321, 95));
+        gridLayoutWidget_2->setGeometry(QRect(9, 19, 321, 111));
         gridLayout_2 = new QGridLayout(gridLayoutWidget_2);
         gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
         gridLayout_2->setContentsMargins(0, 0, 0, 0);
-        label_4 = new QLabel(gridLayoutWidget_2);
-        label_4->setObjectName(QStringLiteral("label_4"));
-
-        gridLayout_2->addWidget(label_4, 1, 0, 1, 1);
-
-        label_3 = new QLabel(gridLayoutWidget_2);
-        label_3->setObjectName(QStringLiteral("label_3"));
-
-        gridLayout_2->addWidget(label_3, 0, 0, 1, 1);
-
-        verticalLayout = new QVBoxLayout();
-        verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         constant_light_radio = new QRadioButton(gridLayoutWidget_2);
         light_button_group = new QButtonGroup(ParametersPanel);
         light_button_group->setObjectName(QStringLiteral("light_button_group"));
@@ -159,25 +146,32 @@ public:
         constant_light_radio->setMinimumSize(QSize(154, 0));
         constant_light_radio->setChecked(true);
 
-        verticalLayout->addWidget(constant_light_radio);
+        gridLayout_2->addWidget(constant_light_radio, 1, 1, 1, 1);
 
-        sphere_light_radio = new QRadioButton(gridLayoutWidget_2);
-        light_button_group->addButton(sphere_light_radio);
-        sphere_light_radio->setObjectName(QStringLiteral("sphere_light_radio"));
+        label_3 = new QLabel(gridLayoutWidget_2);
+        label_3->setObjectName(QStringLiteral("label_3"));
 
-        verticalLayout->addWidget(sphere_light_radio);
-
-
-        gridLayout_2->addLayout(verticalLayout, 1, 1, 1, 1);
+        gridLayout_2->addWidget(label_3, 0, 0, 1, 1);
 
         light_color_button = new QPushButton(gridLayoutWidget_2);
         light_color_button->setObjectName(QStringLiteral("light_color_button"));
 
         gridLayout_2->addWidget(light_color_button, 0, 1, 1, 1);
 
+        sphere_light_radio = new QRadioButton(gridLayoutWidget_2);
+        light_button_group->addButton(sphere_light_radio);
+        sphere_light_radio->setObjectName(QStringLiteral("sphere_light_radio"));
+
+        gridLayout_2->addWidget(sphere_light_radio, 2, 1, 1, 1);
+
+        label_4 = new QLabel(gridLayoutWidget_2);
+        label_4->setObjectName(QStringLiteral("label_4"));
+
+        gridLayout_2->addWidget(label_4, 1, 0, 2, 1);
+
         groupBox_3 = new QGroupBox(ParametersPanel);
         groupBox_3->setObjectName(QStringLiteral("groupBox_3"));
-        groupBox_3->setGeometry(QRect(10, 240, 341, 121));
+        groupBox_3->setGeometry(QRect(10, 300, 341, 101));
         gridLayoutWidget_3 = new QWidget(groupBox_3);
         gridLayoutWidget_3->setObjectName(QStringLiteral("gridLayoutWidget_3"));
         gridLayoutWidget_3->setGeometry(QRect(10, 20, 321, 81));
@@ -213,7 +207,7 @@ public:
 
         groupBox_5 = new QGroupBox(ParametersPanel);
         groupBox_5->setObjectName(QStringLiteral("groupBox_5"));
-        groupBox_5->setGeometry(QRect(10, 370, 341, 71));
+        groupBox_5->setGeometry(QRect(10, 420, 341, 61));
         gridLayoutWidget_4 = new QWidget(groupBox_5);
         gridLayoutWidget_4->setObjectName(QStringLiteral("gridLayoutWidget_4"));
         gridLayoutWidget_4->setGeometry(QRect(10, 20, 321, 41));
@@ -237,7 +231,7 @@ public:
 
         groupBox_4 = new QGroupBox(ParametersPanel);
         groupBox_4->setObjectName(QStringLiteral("groupBox_4"));
-        groupBox_4->setGeometry(QRect(10, 450, 341, 101));
+        groupBox_4->setGeometry(QRect(10, 500, 341, 91));
         gridLayoutWidget_5 = new QWidget(groupBox_4);
         gridLayoutWidget_5->setObjectName(QStringLiteral("gridLayoutWidget_5"));
         gridLayoutWidget_5->setGeometry(QRect(10, 20, 321, 71));
@@ -267,7 +261,7 @@ public:
 
         groupBox_6 = new QGroupBox(ParametersPanel);
         groupBox_6->setObjectName(QStringLiteral("groupBox_6"));
-        groupBox_6->setGeometry(QRect(10, 560, 341, 181));
+        groupBox_6->setGeometry(QRect(10, 610, 341, 151));
         gridLayoutWidget_6 = new QWidget(groupBox_6);
         gridLayoutWidget_6->setObjectName(QStringLiteral("gridLayoutWidget_6"));
         gridLayoutWidget_6->setGeometry(QRect(10, 20, 321, 131));
@@ -345,11 +339,11 @@ public:
         borders_check->setText(QApplication::translate("ParametersPanel", "Show triangle borders", nullptr));
         reset_grid_button->setText(QApplication::translate("ParametersPanel", "Reset grid", nullptr));
         groupBox_2->setTitle(QApplication::translate("ParametersPanel", "Light", nullptr));
-        label_4->setText(QApplication::translate("ParametersPanel", "Vector", nullptr));
-        label_3->setText(QApplication::translate("ParametersPanel", "Color", nullptr));
         constant_light_radio->setText(QApplication::translate("ParametersPanel", "Constant", nullptr));
-        sphere_light_radio->setText(QApplication::translate("ParametersPanel", "Spherical", nullptr));
+        label_3->setText(QApplication::translate("ParametersPanel", "Color", nullptr));
         light_color_button->setText(QString());
+        sphere_light_radio->setText(QApplication::translate("ParametersPanel", "Spherical", nullptr));
+        label_4->setText(QApplication::translate("ParametersPanel", "Vector", nullptr));
         groupBox_3->setTitle(QApplication::translate("ParametersPanel", "Paint color", nullptr));
         paint_texture_button->setText(QApplication::translate("ParametersPanel", "Choose", nullptr));
         constant_paint_radio->setText(QApplication::translate("ParametersPanel", "Constant", nullptr));
