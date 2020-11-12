@@ -26,8 +26,10 @@ It is possible to
 * choose fill texture and enable it by selecting the radio button
 * change color determination way - the color can be computed precisely for every pixel, 
 or interpolated from triangles' vertices
-* change normal vector `N` (constant - [0,0,1], or imported from texture)
+* change normal vector `N` (constant - [0,0,1], or obtained from chosen normal map)
 * change parameters `kd`, `ks` and `m` (`kd` and `ks` sliders are bound together, so that always `kd = 1 - ks`)
+
+In the folder `img`, there is one sample image to use as fill texture and one to use as a normal map.
 
 
 ## Remarks
