@@ -12,7 +12,7 @@ set(CMAKE_CXX_STANDARD 14)
 #set(GXX_COVERAGE_COMPILE_FLAGS "-std=c++1z")
 #set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} ${GXX_COVERAGE_COMPILE_FLAGS}")
 
-add_executable(triangle_painter main.cpp TriangleSurface.h ParametersPanel.h PainterWindow.h PixelPainter.h AdvancedPixelPainter.h gbGeo.h Polygon.h painting.h PainterSettings.h gbGeo.cpp ColorButtonWrapper.h PaintCommand.h BarycentricPixelPainter.h SurfacePainter.h FillTriangleStrategy.h SurfacePainterFactory.h LightAnimation.h)
+add_executable(triangle_painter src/main.cpp src/TriangleSurface.h src/ParametersPanel.h src/PainterWindow.h src/PixelPainter.h src/AdvancedPixelPainter.h src/gbGeo.h src/Polygon.h src/painting.h src/PainterSettings.h src/gbGeo.cpp src/ColorButtonWrapper.h src/PaintCommand.h src/BarycentricPixelPainter.h src/SurfacePainter.h src/FillTriangleStrategy.h src/SurfacePainterFactory.h src/LightAnimation.h)
 
 target_link_libraries(${PROJECT_NAME}
         Qt5::Core
