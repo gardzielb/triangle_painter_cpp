@@ -63,7 +63,7 @@ private:
 	{
 		if ( settings.spiral_light )
 		{
-			light_animation->start( settings.light_position, 100 );
+			light_animation->start( settings.light_position );
 		} else
 		{
 			light_animation->stop();

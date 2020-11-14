@@ -28,7 +28,7 @@ public:
 			for ( int y = 0; y < image.height(); y++ )
 			{
 				QColor color = image.pixel( x, y );
-				Eigen::Vector3f v( color.red() - 127, color.green() - 127, color.blue() / 2 );
+				Eigen::Vector3f v( color.red() - 127, color.green() - 127, (float) color.blue() / 2 );
 				v.normalize();
 				map[x * height + y] = v;
 			}

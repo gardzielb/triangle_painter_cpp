@@ -15,6 +15,14 @@
 #include <eigen/Core>
 
 
+int correct_color( int value )
+{
+	if ( value < 0 ) return 0;
+	if ( value > 255 ) return 255;
+	return value;
+}
+
+
 class AdvancedPixelPainter : public PixelPainter
 {
 private:
@@ -51,9 +59,9 @@ public:
 		Eigen::Vector3f v_vector( 0, 0, 1 );
 
 		float a = settings.kd * nl_dot + settings.ks * pow( v_vector.dot( r_vector ), settings.m );
-		int r = a * color.red() * settings.light_color.red() / COLOR_MAX;
-		int g = a * color.green() * settings.light_color.green() / COLOR_MAX;
-		int b = a * color.blue() * settings.light_color.blue() / COLOR_MAX;
+		int r = correct_color( a * color.red() * settings.light_color.red() / COLOR_MAX );
+		int g = correct_color( a * color.green() * settings.light_color.green() / COLOR_MAX );
+		int b = correct_color( a * color.blue() * settings.light_color.blue() / COLOR_MAX );
 
 		paint_command->execute( x, y, QColor( r, g, b ) );
 	}
