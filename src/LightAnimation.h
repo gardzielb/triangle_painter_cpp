@@ -18,8 +18,8 @@ class LightAnimation : public QObject
 {
 private:
 	TriangleSurface & surface;
-//	gbGeo::Vector3 * light_position = nullptr;
-	Eigen::Vector3f * light_position = nullptr;
+	gbGeo::Vector3 * light_position = nullptr;
+//	Eigen::Vector3f * light_position = nullptr;
 	QTimer timer;
 	QTime time;
 	int r = 0;
@@ -29,7 +29,7 @@ public:
 	explicit LightAnimation( TriangleSurface & surface ) : surface( surface ), timer()
 	{}
 
-	void start( Eigen::Vector3f * light_pos, int radius )
+	void start( gbGeo::Vector3 * light_pos, int radius )
 	{
 		r = radius;
 		light_position = light_pos;
@@ -49,9 +49,9 @@ private:
 	void move_light()
 	{
 		int t = time.elapsed();
-		light_position->x() = r * cos( t * omega ) + (float) surface.width() / 2;
-		light_position->y() = r * sin( t * omega ) + (float) surface.height() / 2;
-		light_position->z() = t % 20;
+		light_position->X() = r * cos( t * omega ) + (float) surface.width() / 2;
+		light_position->Y() = r * sin( t * omega ) + (float) surface.height() / 2;
+		light_position->Z() = t % 20;
 		surface.full_repaint();
 	}
 };

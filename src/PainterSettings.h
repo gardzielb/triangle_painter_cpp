@@ -9,18 +9,21 @@
 #include <QtGui/QImage>
 #include <QtCore/QMutex>
 #include <eigen/Core>
+#include "gbGeo.h"
 
 
 class NormalMap
 {
 private:
-	Eigen::Vector3f * map = nullptr;
+//	Eigen::Vector3f * map = nullptr;
+	gbGeo::Vector3 * map = nullptr;
 	int height = 0;
 
 public:
 	explicit NormalMap( const QImage & image )
 	{
-		map = new Eigen::Vector3f[image.width() * image.height()];
+//		map = new Eigen::Vector3f[image.width() * image.height()];
+		map = new gbGeo::Vector3[image.width() * image.height()];
 		height = image.height();
 
 		for ( int x = 0; x < image.width(); x++ )
@@ -28,14 +31,15 @@ public:
 			for ( int y = 0; y < image.height(); y++ )
 			{
 				QColor color = image.pixel( x, y );
-				Eigen::Vector3f v( color.red() - 127, color.green() - 127, color.blue() / 2 );
+				gbGeo::Vector3 v( color.red() - 127, color.green() - 127, color.blue() / 2 );
 				v.normalize();
 				map[x * height + y] = v;
 			}
 		}
 	}
 
-	Eigen::Vector3f & operator()( int x, int y )
+//	Eigen::Vector3f & operator()( int x, int y )
+	gbGeo::Vector3 & operator()( int x, int y )
 	{
 		return map[x * height + y];
 	}
@@ -54,9 +58,11 @@ struct PainterSettings
 	float ks = 0.5;
 
 	bool spiral_light = false;
-	Eigen::Vector3f * light_position = nullptr;
+	gbGeo::Vector3 * light_position = nullptr;
+//	Eigen::Vector3f * light_position = nullptr;
 
-	Eigen::Vector3f default_light_vector;
+//	Eigen::Vector3f default_light_vector;
+	gbGeo::Vector3 default_light_vector;
 	QColor light_color;
 
 	bool texture_paint = false;
@@ -65,7 +71,8 @@ struct PainterSettings
 
 	bool texture_normal_map = false;
 	NormalMap * normal_map = nullptr;
-	Eigen::Vector3f default_normal_vector;
+	gbGeo::Vector3 default_normal_vector;
+//	Eigen::Vector3f default_normal_vector;
 
 	bool vertex_interpolation = false;
 

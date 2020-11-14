@@ -161,7 +161,8 @@ private slots:
 		settings.spiral_light = spherical;
 		if ( spherical )
 		{
-			settings.light_position = new Eigen::Vector3f( 0, 0, 0 );
+//			settings.light_position = new Eigen::Vector3f( 0, 0, 0 );
+			settings.light_position = new gbGeo::Vector3( 0, 0, 0 );
 		}
 		emit lightChanged( settings );
 	};

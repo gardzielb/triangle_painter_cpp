@@ -33,22 +33,22 @@ public:
 	{
 		QColor color = (settings.texture_paint && settings.image) ? settings.image->pixel( x, y ) : settings.fill_color;
 
-		Eigen::Vector3f & light_vector = settings.default_light_vector;
+		gbGeo::Vector3 & light_vector = settings.default_light_vector;
 		if ( settings.spiral_light && settings.light_position )
 		{
-			light_vector = *settings.light_position - Eigen::Vector3f( x, y, 0 );
+			light_vector = *settings.light_position - gbGeo::Vector3( x, y, 0 );
 			light_vector.normalize();
 		}
 
-		Eigen::Vector3f & n_vector = settings.default_normal_vector;
+		gbGeo::Vector3 & n_vector = settings.default_normal_vector;
 		if ( settings.texture_normal_map && settings.normal_map )
 		{
 			n_vector = (*settings.normal_map)( x, y );
 		}
 
 		float nl_dot = n_vector.dot( light_vector );
-		Eigen::Vector3f r_vector = 2 * nl_dot * n_vector - light_vector;
-		Eigen::Vector3f v_vector( 0, 0, 1 );
+		gbGeo::Vector3 r_vector = 2 * nl_dot * n_vector - light_vector;
+		gbGeo::Vector3 v_vector( 0, 0, 1 );
 
 		float a = settings.kd * nl_dot + settings.ks * pow( v_vector.dot( r_vector ), settings.m );
 		int r = a * color.red() * settings.light_color.red() / COLOR_MAX;
