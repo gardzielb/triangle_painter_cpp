@@ -11,6 +11,7 @@
 #include <QMouseEvent>
 #include <utility>
 #include <QtCore/QTime>
+#include <iostream>
 #include "AdvancedPixelPainter.h"
 #include "Polygon.h"
 #include "BarycentricPixelPainter.h"
@@ -161,8 +162,13 @@ public:
 
 	void full_repaint()
 	{
+		QTime time;
+		time.start();
 		background_painter->paint_triangles( triangle_paint_list );
+		std::cout << "painting time: " << time.elapsed() << "\n";
+
 		repaint();
+
 //		auto worker = new PaintingThread( background_painter, triangle_paint_list );
 //		QObject::connect( worker, &QThread::finished, [ = ]() {
 //			this->repaint();
