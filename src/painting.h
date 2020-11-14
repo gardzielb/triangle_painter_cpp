@@ -37,7 +37,7 @@ void update_aet( std::list<ActiveEdge> & aet, int y )
 	{
 		e.x += e.delta_x;
 	}
-	aet.sort( []( const ActiveEdge & e1, const ActiveEdge & e2 ) { return e1.x <= e2.x; } );
+	aet.sort( []( const ActiveEdge & e1, const ActiveEdge & e2 ) { return e1.x < e2.x; } );
 }
 
 std::pair<QPoint, QPoint> find_neighbors( int index, const std::vector<QPoint *> & vertices )

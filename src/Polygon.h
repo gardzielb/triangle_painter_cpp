@@ -32,8 +32,8 @@ public:
 
 	bool has_vertex( int x, int y ) const
 	{
-		return std::any_of( vertices.cbegin(), vertices.cend(),
-							[ = ]( const QPoint * v ) { return v->x() == x && v->y() == y; }
+		return std::any_of(
+				vertices.cbegin(), vertices.cend(), [ = ]( const QPoint * v ) { return v->x() == x && v->y() == y; }
 		);
 	}
 
@@ -66,7 +66,7 @@ public:
 	{
 		std::sort(
 				vertices.begin(), vertices.end(),
-				[]( const QPoint * p1, const QPoint * p2 ) { return p1->y() <= p2->y(); }
+				[]( const QPoint * p1, const QPoint * p2 ) { return p1->y() < p2->y(); }
 		);
 		bar_values[0] = vertices[1]->y() - vertices[2]->y();
 		bar_values[1] = vertices[2]->x() - vertices[1]->x();
