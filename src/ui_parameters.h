@@ -42,7 +42,7 @@ public:
     QRadioButton *constant_light_radio;
     QLabel *label_3;
     QPushButton *light_color_button;
-    QRadioButton *sphere_light_radio;
+    QRadioButton *spiral_light_radio;
     QLabel *label_4;
     QGroupBox *groupBox_3;
     QWidget *gridLayoutWidget_3;
@@ -158,11 +158,11 @@ public:
 
         gridLayout_2->addWidget(light_color_button, 0, 1, 1, 1);
 
-        sphere_light_radio = new QRadioButton(gridLayoutWidget_2);
-        light_button_group->addButton(sphere_light_radio);
-        sphere_light_radio->setObjectName(QStringLiteral("sphere_light_radio"));
+        spiral_light_radio = new QRadioButton(gridLayoutWidget_2);
+        light_button_group->addButton(spiral_light_radio);
+        spiral_light_radio->setObjectName(QStringLiteral("spiral_light_radio"));
 
-        gridLayout_2->addWidget(sphere_light_radio, 2, 1, 1, 1);
+        gridLayout_2->addWidget(spiral_light_radio, 2, 1, 1, 1);
 
         label_4 = new QLabel(gridLayoutWidget_2);
         label_4->setObjectName(QStringLiteral("label_4"));
@@ -342,7 +342,7 @@ public:
         constant_light_radio->setText(QApplication::translate("ParametersPanel", "Constant", nullptr));
         label_3->setText(QApplication::translate("ParametersPanel", "Color", nullptr));
         light_color_button->setText(QString());
-        sphere_light_radio->setText(QApplication::translate("ParametersPanel", "Spherical", nullptr));
+        spiral_light_radio->setText(QApplication::translate("ParametersPanel", "Spiral", nullptr));
         label_4->setText(QApplication::translate("ParametersPanel", "Vector", nullptr));
         groupBox_3->setTitle(QApplication::translate("ParametersPanel", "Paint color", nullptr));
         paint_texture_button->setText(QApplication::translate("ParametersPanel", "Choose", nullptr));

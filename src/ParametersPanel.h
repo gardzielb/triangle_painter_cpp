@@ -133,7 +133,7 @@ private:
 				[ = ]( bool checked ) { change_light_source( !checked ); }
 		);
 		QObject::connect(
-				ui.sphere_light_radio, &QRadioButton::clicked,
+				ui.spiral_light_radio, &QRadioButton::clicked,
 				[ = ]( bool checked ) { change_light_source( checked ); }
 		);
 		QObject::connect(
@@ -158,7 +158,7 @@ private slots:
 
 	void change_light_source( bool spherical )
 	{
-		settings.spherical_light = spherical;
+		settings.spiral_light = spherical;
 		if ( spherical )
 		{
 			settings.light_position = new Eigen::Vector3f( 0, 0, 0 );
@@ -187,21 +187,27 @@ private slots:
 	void load_paint_image()
 	{
 		QString img_file = QFileDialog::getOpenFileName();
-		delete settings.image;
-		auto img = new QImage( img_file );
-		settings.image = new QImage( std::move( img->scaled( 810, 810, Qt::IgnoreAspectRatio ) ) );
-		delete img;
-		ui.texture_paint_radio->setEnabled( true );
+		if ( !img_file.isNull() )
+		{
+			delete settings.image;
+			auto img = new QImage( img_file );
+			settings.image = new QImage( std::move( img->scaled( 810, 810, Qt::IgnoreAspectRatio ) ) );
+			delete img;
+			ui.texture_paint_radio->setEnabled( true );
+		}
 	}
 
 	void load_normal_map()
 	{
 		QString img_file = QFileDialog::getOpenFileName();
-		delete settings.normal_map;
-		auto img = new QImage( img_file );
-		settings.normal_map = new NormalMap( img->scaled( 810, 810, Qt::IgnoreAspectRatio ) );
-		delete img;
-		ui.texture_n_radio->setEnabled( true );
+		if ( !img_file.isNull() )
+		{
+			delete settings.normal_map;
+			auto img = new QImage( img_file );
+			settings.normal_map = new NormalMap( img->scaled( 810, 810, Qt::IgnoreAspectRatio ) );
+			delete img;
+			ui.texture_n_radio->setEnabled( true );
+		}
 	}
 
 	void change_slider_param( int * param, int value )

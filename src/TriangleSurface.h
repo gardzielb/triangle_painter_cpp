@@ -21,25 +21,6 @@
 #include "LightAnimation.h"
 
 
-//class PaintingThread : public QThread
-//{
-//private:
-//	SurfacePainter * painter = nullptr;
-//	std::list<Polygon *> & paint_list;
-//
-//public:
-//	PaintingThread( SurfacePainter * painter, std::list<Polygon *> & paint_list ) : paint_list( paint_list )
-//	{
-//		this->painter = painter;
-//	}
-//
-//	void run() override
-//	{
-//		painter->paint_triangles( paint_list );
-//	}
-//};
-
-
 class TriangleSurface : public QWidget
 {
 public:
@@ -168,19 +149,6 @@ public:
 		std::cout << "painting time: " << time.elapsed() << "\n";
 
 		repaint();
-
-//		auto worker = new PaintingThread( background_painter, triangle_paint_list );
-//		QObject::connect( worker, &QThread::finished, [ = ]() {
-//			this->repaint();
-//			this->paint_mutex->unlock();
-//			this->paint_list_mutex->unlock();
-//			worker->deleteLater();
-//		} );
-//		if ( paint_mutex->tryLock() )
-//		{
-//			paint_list_mutex->lock();
-//			worker->start();
-//		}
 	}
 
 	void create_triangle_grid()

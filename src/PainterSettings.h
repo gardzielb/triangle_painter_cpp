@@ -14,47 +14,48 @@
 class NormalMap
 {
 private:
-	std::vector<std::vector<Eigen::Vector3f>> map;
+	Eigen::Vector3f * map = nullptr;
+	int height = 0;
 
 public:
 	explicit NormalMap( const QImage & image )
 	{
+		map = new Eigen::Vector3f[image.width() * image.height()];
+		height = image.height();
+
 		for ( int x = 0; x < image.width(); x++ )
 		{
-			std::vector<Eigen::Vector3f> column;
 			for ( int y = 0; y < image.height(); y++ )
 			{
 				QColor color = image.pixel( x, y );
-				Eigen::Vector3f v( color.red() - 127, color.green() - 127, color.blue() - 127 );
+				Eigen::Vector3f v( color.red() - 127, color.green() - 127, color.blue() / 2 );
 				v.normalize();
-				column.push_back( v );
-
-//				gbGeo::Vector v( { (float) color.red() - 127, (float) color.green() - 127, (float) color.blue() / 2 } );
-//				column.emplace_back( v.normalized() );
+				map[x * height + y] = v;
 			}
-			map.push_back( column );
 		}
 	}
 
-	std::vector<Eigen::Vector3f> & operator[]( int i )
+	Eigen::Vector3f & operator()( int x, int y )
 	{
-		return map[i];
+		return map[x * height + y];
+	}
+
+	~NormalMap()
+	{
+		delete[] map;
 	}
 };
 
 
 struct PainterSettings
 {
-	QMutex * mutex = new QMutex();
 	int m = 1;
 	float kd = 0.5;
 	float ks = 0.5;
 
-	bool spherical_light = false;
-//	gbGeo::Vector3 * light_position = nullptr;
+	bool spiral_light = false;
 	Eigen::Vector3f * light_position = nullptr;
 
-	//	gbGeo::Vector default_light_vector;
 	Eigen::Vector3f default_light_vector;
 	QColor light_color;
 
@@ -64,7 +65,6 @@ struct PainterSettings
 
 	bool texture_normal_map = false;
 	NormalMap * normal_map = nullptr;
-//	gbGeo::Vector default_normal_vector;
 	Eigen::Vector3f default_normal_vector;
 
 	bool vertex_interpolation = false;

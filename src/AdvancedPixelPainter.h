@@ -34,7 +34,7 @@ public:
 		QColor color = (settings.texture_paint && settings.image) ? settings.image->pixel( x, y ) : settings.fill_color;
 
 		Eigen::Vector3f & light_vector = settings.default_light_vector;
-		if ( settings.spherical_light && settings.light_position )
+		if ( settings.spiral_light && settings.light_position )
 		{
 			light_vector = *settings.light_position - Eigen::Vector3f( x, y, 0 );
 			light_vector.normalize();
@@ -43,7 +43,7 @@ public:
 		Eigen::Vector3f & n_vector = settings.default_normal_vector;
 		if ( settings.texture_normal_map && settings.normal_map )
 		{
-			n_vector = (*settings.normal_map)[x][y];
+			n_vector = (*settings.normal_map)( x, y );
 		}
 
 		float nl_dot = n_vector.dot( light_vector );

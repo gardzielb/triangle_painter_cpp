@@ -61,7 +61,7 @@ private:
 private:
 	void change_light( PainterSettings & settings )
 	{
-		if ( settings.spherical_light )
+		if ( settings.spiral_light )
 		{
 			light_animation->start( settings.light_position, 100 );
 		} else

@@ -23,6 +23,7 @@ private:
 	QTimer timer;
 	QTime time;
 	int r = 0;
+	float omega = 0.00175;
 
 public:
 	explicit LightAnimation( TriangleSurface & surface ) : surface( surface ), timer()
@@ -32,7 +33,7 @@ public:
 	{
 		r = radius;
 		light_position = light_pos;
-		timer.setInterval( 1000 );
+		timer.setInterval( 200 );
 		QObject::connect( &timer, &QTimer::timeout, this, &LightAnimation::move_light );
 		time.start();
 		timer.start();
@@ -48,8 +49,8 @@ private:
 	void move_light()
 	{
 		int t = time.elapsed();
-		light_position->x() = r * cos( t * 0.1 ) + (float) surface.width() / 2;
-		light_position->y() = r * sin( t * 0.1 ) + (float) surface.height() / 2;
+		light_position->x() = r * cos( t * omega ) + (float) surface.width() / 2;
+		light_position->y() = r * sin( t * omega ) + (float) surface.height() / 2;
 		light_position->z() = t % 20;
 		surface.full_repaint();
 	}
