@@ -2,17 +2,27 @@
 
 ## Dependencies
 
-* Qt5, preferably version 5.15
+* [Qt5](https://www.qt.io/)
+* [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page)
 
 ## Compilation
 
-### Linux
+The project can be built with Cmake (minimum version 3.17) and it is possible to compile it both on Linux (using g++ compiler) and Windows with MSVC compiler. However, the recommended way is to use Linux and follow instructions below.
 
-The project can be compiled with Cmake (minimum version - 3.17), using the `CmakeLists.txt` file.
-In order to build the project, Qt5 needs to be installed. It is recommended to install it from the distro's package manager.
-After installing Qt, compile the project using command:
+### Installing dependencies
 
-`cmake --build <output_dir> --target triangle_painter -- -j 6`.
+* **Qt**: it is recommended to isntall Qt5 from the distro's package manager, such as apt.
+* **Eigen**: Eigen can be installed using one of the links [here](http://eigen.tuxfamily.org/index.php?title=Main_Page). The recommended way is to clone git repository. In order to make Eigen headers visible to the project files, create a symlink in `/usr/local/include` directory, pointing to `<path-to-eigen-repository>/Eigen/`.
+
+### Cmake build
+
+Create directory for build output and `cd` into it. Then run the following commands.
+
+`cmake -DCMAKE_BUILD_TYPE=Release /full/path/to/triangle_painter/`
+
+`cmake --build <output_dir> --target triangle_painter -- -j 6`
+
+The executable file will be created in output directory.
 
 ## Usage
 
