@@ -68,6 +68,7 @@ struct PainterSettings
 	Eigen::Vector3f default_normal_vector;
 
 	bool vertex_interpolation = false;
+	bool draw_borders = true;
 
 	PainterSettings()
 			: fill_color( 0, 255, 0 ),

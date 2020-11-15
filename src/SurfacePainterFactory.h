@@ -26,6 +26,7 @@ private:
 	PixelPainter * pixel_painter = nullptr;
 	PaintCommand * paint_command = nullptr;
 	SurfacePainter * surface_painter = nullptr;
+	FillTriangleStrategy * fill_strategy = nullptr;
 
 public:
 	ImageSurfacePainterFactory( int width, int height ) : img_height( height )
@@ -36,29 +37,36 @@ public:
 
 	SurfacePainter * create_painter( const PainterSettings & settings ) override
 	{
-		delete surface_painter;
-		delete pixel_painter;
-		delete paint_command;
+		cleanup();
 		paint_command = new ImagePixelPaintCommand( pixels, img_height );
 		pixel_painter = new AdvancedPixelPainter( paint_command, settings );
 
 		if ( settings.vertex_interpolation )
 		{
-			surface_painter = new SurfacePainter(
-					image, new InterpolationFillTriangleStrategy( pixel_painter, paint_command, pixels, img_height )
-			);
-		} else
+			fill_strategy = new InterpolationFillTriangleStrategy( pixel_painter, paint_command, pixels, img_height );
+		}
+		else
 		{
-			surface_painter = new SurfacePainter( image, new PreciseFillTriangleStrategy( pixel_painter ) );
+			fill_strategy = new PreciseFillTriangleStrategy( pixel_painter );
 		}
 
-		return surface_painter;
+		return new SurfacePainter( image, fill_strategy, settings.draw_borders );
 	}
 
 	~ImageSurfacePainterFactory() override
 	{
+		cleanup();
 		delete image;
 		delete[] pixels;
+	}
+
+private:
+	void cleanup()
+	{
+		delete surface_painter;
+		delete pixel_painter;
+		delete paint_command;
+		delete fill_strategy;
 	}
 };
 

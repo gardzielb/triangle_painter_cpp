@@ -7,7 +7,7 @@
 
 ## Compilation
 
-The project can be built with Cmake (minimum version 3.17) and it is possible to compile it both on Linux (using g++ compiler) and Windows with MSVC compiler. However, the recommended way is to use Linux and follow instructions below.
+The project can be built with Cmake (minimum version 3.5) and it is possible to compile it both on Linux (using g++ compiler) and Windows with MSVC compiler. However, the recommended way is to use Linux and follow instructions below.
 
 ### Installing dependencies
 

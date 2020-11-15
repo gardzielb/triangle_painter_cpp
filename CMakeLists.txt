@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.5)
 project(triangle_painter)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)

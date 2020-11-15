@@ -110,20 +110,23 @@ public:
 	{
 		if ( is_mouse_pressed && active_point )
 		{
+			if ( is_outside_box( event->x(), event->y() ) ) return;
+
 			active_point->setX( event->x() );
 			active_point->setY( event->y() );
 			for ( auto triangle : active_triangles )
 			{
 				triangle->update();
 			}
-		} else
+		}
+		else
 		{
 			active_point = nullptr;
 			active_row = -1;
 			active_col = -1;
-			for ( int i = 0; i < row_count + 1; i++ )
+			for ( int i = 1; i < row_count; i++ )
 			{
-				for ( int j = 0; j < col_count + 1; j++ )
+				for ( int j = 1; j < col_count; j++ )
 				{
 					QPoint * p = grid->point( i, j );
 					if ( gbGeo::line_length( p->x(), p->y(), event->x(), event->y() ) <= POINT_HIT_RADIUS )
@@ -143,11 +146,7 @@ public:
 
 	void full_repaint()
 	{
-		QTime time;
-		time.start();
 		background_painter->paint_triangles( triangle_paint_list );
-		std::cout << "painting time: " << time.elapsed() << "\n";
-
 		repaint();
 	}
 
@@ -221,6 +220,11 @@ private:
 			active_triangles.push_back( grid->upper_triangle( row, col - 1 ) );
 			active_triangles.push_back( grid->lower_triangle( row, col - 1 ) );
 		}
+	}
+
+	bool is_outside_box( int x, int y )
+	{
+		return x >= width() || x <= 0 || y >= height() || y <= 0;
 	}
 };
 

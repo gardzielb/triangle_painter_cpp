@@ -21,16 +21,18 @@ private:
 	FillTriangleStrategy * fill_strategy = nullptr;
 	QPainter * painter = new QPainter();
 	QImage * image = nullptr;
+	bool borders = true;
 
 	const QBrush active_brush;
 	const QColor stroke_pen;
 
 public:
-	explicit SurfacePainter( QImage * image, FillTriangleStrategy * fill_strategy )
+	explicit SurfacePainter( QImage * image, FillTriangleStrategy * fill_strategy, bool borders = true )
 			: active_brush( QColor( 120, 255, 120 ) ), stroke_pen( 0, 0, 0 )
 	{
 		this->fill_strategy = fill_strategy;
 		this->image = image;
+		this->borders = borders;
 	}
 
 	QImage * get_image()
@@ -48,7 +50,7 @@ public:
 	void paint_triangles( const std::list<Polygon *> & triangles )
 	{
 		fill_triangles( triangles );
-		draw_borders( triangles );
+		if ( borders ) draw_borders( triangles );
 	}
 
 	void paint_active_point( int x, int y, int radius )

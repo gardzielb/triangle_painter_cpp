@@ -51,9 +51,9 @@ public:
 		ui.kd_slider->setValue( 0.5 * ui.kd_slider->maximum() );
 		ui.ks_slider->setValue( 0.5 * ui.ks_slider->maximum() );
 
-		set_label_text( ui.m_label, ui.m_slider->value() );
-		set_label_text( ui.kd_label, (float) ui.kd_slider->value() / ui.kd_slider->maximum() );
-		set_label_text( ui.ks_label, (float) ui.ks_slider->value() / ui.ks_slider->maximum() );
+		set_label_text( ui.m_label, std::to_string( ui.m_slider->value() ) );
+		set_label_text( ui.kd_label, format_float_number( (float) ui.kd_slider->value() / ui.kd_slider->maximum() ) );
+		set_label_text( ui.ks_label, format_float_number( (float) ui.ks_slider->value() / ui.ks_slider->maximum() ) );
 
 		paint_color_chooser = new ColorButtonWrapper( *ui.paint_color_button, settings.fill_color );
 		light_color_chooser = new ColorButtonWrapper( *ui.light_color_button, settings.light_color );
@@ -93,7 +93,10 @@ private:
 				light_color_chooser, &ColorButtonWrapper::colorChosen, this, &ParametersPanel::change_light_color
 		);
 
-		QObject::connect( ui.m_slider, &QSlider::valueChanged, [ = ]( int m ) { set_label_text( ui.m_label, m ); } );
+		QObject::connect(
+				ui.m_slider, &QSlider::valueChanged,
+				[ = ]( int m ) { set_label_text( ui.m_label, std::to_string( m ) ); }
+		);
 		QObject::connect(
 				ui.kd_slider, &QSlider::valueChanged,
 				[ = ]( int kd ) { update_kd( (float) kd / ui.kd_slider->maximum(), true ); }
@@ -152,9 +155,19 @@ private:
 				ui.texture_n_radio, &QRadioButton::clicked,
 				[ = ]( bool checked ) { change_radio_param( &settings.texture_normal_map, checked ); }
 		);
+
+		QObject::connect(
+				ui.borders_check, &QCheckBox::clicked, [ = ]( bool checked ) { toggle_draw_borders( checked ); }
+		);
 	}
 
 private slots:
+
+	void toggle_draw_borders( bool draw_borders )
+	{
+		settings.draw_borders = draw_borders;
+		emit settingsChanged( settings );
+	};
 
 	void change_light_source( bool spherical )
 	{
@@ -194,6 +207,8 @@ private slots:
 			settings.image = new QImage( std::move( img->scaled( 810, 810, Qt::IgnoreAspectRatio ) ) );
 			delete img;
 			ui.texture_paint_radio->setEnabled( true );
+
+			if ( settings.image ) emit settingsChanged( settings );
 		}
 	}
 
@@ -207,6 +222,8 @@ private slots:
 			settings.normal_map = new NormalMap( img->scaled( 810, 810, Qt::IgnoreAspectRatio ) );
 			delete img;
 			ui.texture_n_radio->setEnabled( true );
+
+			if ( settings.normal_map ) emit settingsChanged( settings );
 		}
 	}
 
@@ -224,7 +241,7 @@ private slots:
 
 	void update_kd( float kd, bool user_call )
 	{
-		set_label_text( ui.kd_label, kd );
+		set_label_text( ui.kd_label, format_float_number( kd ) );
 		settings.kd = kd;
 
 		if ( user_call )
@@ -236,7 +253,7 @@ private slots:
 
 	void update_ks( float ks, bool user_call )
 	{
-		set_label_text( ui.ks_label, ks );
+		set_label_text( ui.ks_label, format_float_number( ks ) );
 		settings.ks = ks;
 
 		if ( user_call )
@@ -247,9 +264,15 @@ private slots:
 	}
 
 private:
-	static void set_label_text( QLabel * label, float value )
+	static void set_label_text( QLabel * label, const std::string & value )
 	{
-		label->setText( QString::fromStdString( std::to_string( value ) ) );
+		label->setText( QString::fromStdString( value ) );
+	}
+
+	static std::string format_float_number( float value )
+	{
+		std::string str = std::to_string( value );
+		return str.substr( 0, str.find( '.' ) + 3 );
 	}
 };
 
