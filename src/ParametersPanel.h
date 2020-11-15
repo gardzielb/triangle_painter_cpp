@@ -70,17 +70,9 @@ public:
 private:
 	void connect_signals()
 	{
-//		QObject::connect(
-//				ui.row_spin, QOverload<int>::of( &QSpinBox::valueChanged ),
-//				[ = ]( int val ) { emit rowCountChanged( val ); }
-//		);
-//		QObject::connect(
-//				ui.col_spin, QOverload<int>::of( &QSpinBox::valueChanged ),
-//				[ = ]( int val ) { emit colCountChanged( val ); }
-//		);
 		QObject::connect(
 				ui.reset_grid_button, &QPushButton::clicked,
-				[ = ]() { emit gridReset( ui.row_spin->value(), ui.col_spin->value() ); }
+				[=]() { emit gridReset( ui.row_spin->value(), ui.col_spin->value() ); }
 		);
 
 		QObject::connect( ui.paint_texture_button, &QPushButton::clicked, this, &ParametersPanel::load_paint_image );
@@ -95,69 +87,69 @@ private:
 
 		QObject::connect(
 				ui.m_slider, &QSlider::valueChanged,
-				[ = ]( int m ) { set_label_text( ui.m_label, std::to_string( m ) ); }
+				[=]( int m ) { set_label_text( ui.m_label, std::to_string( m ) ); }
 		);
 		QObject::connect(
 				ui.kd_slider, &QSlider::valueChanged,
-				[ = ]( int kd ) { update_kd( (float) kd / ui.kd_slider->maximum(), true ); }
+				[=]( int kd ) { update_kd( (float) kd / ui.kd_slider->maximum(), true ); }
 		);
 		QObject::connect(
 				ui.ks_slider, &QSlider::valueChanged,
-				[ = ]( int ks ) { update_ks( (float) ks / ui.ks_slider->maximum(), true ); }
+				[=]( int ks ) { update_ks( (float) ks / ui.ks_slider->maximum(), true ); }
 		);
 
 		QObject::connect(
 				ui.m_slider, &QSlider::sliderReleased,
-				[ = ]() { change_slider_param( &settings.m, ui.m_slider->value() ); }
+				[=]() { change_slider_param( &settings.m, ui.m_slider->value() ); }
 		);
 		QObject::connect(
 				ui.kd_slider, &QSlider::sliderReleased,
-				[ = ]() {
+				[=]() {
 					change_slider_param( &settings.kd, (float) ui.kd_slider->value() / ui.kd_slider->maximum() );
 				}
 		);
 		QObject::connect(
 				ui.ks_slider, &QSlider::sliderReleased,
-				[ = ]() {
+				[=]() {
 					change_slider_param( &settings.ks, (float) ui.ks_slider->value() / ui.ks_slider->maximum() );
 				}
 		);
 
 		QObject::connect(
 				ui.constant_paint_radio, &QRadioButton::clicked,
-				[ = ]( bool checked ) { change_radio_param( &settings.texture_paint, !checked ); }
+				[=]( bool checked ) { change_radio_param( &settings.texture_paint, !checked ); }
 		);
 		QObject::connect(
 				ui.texture_paint_radio, &QRadioButton::clicked,
-				[ = ]( bool checked ) { change_radio_param( &settings.texture_paint, checked ); }
+				[=]( bool checked ) { change_radio_param( &settings.texture_paint, checked ); }
 		);
 		QObject::connect(
 				ui.constant_light_radio, &QRadioButton::clicked,
-				[ = ]( bool checked ) { change_light_source( !checked ); }
+				[=]( bool checked ) { change_light_source( !checked ); }
 		);
 		QObject::connect(
 				ui.spiral_light_radio, &QRadioButton::clicked,
-				[ = ]( bool checked ) { change_light_source( checked ); }
+				[=]( bool checked ) { change_light_source( checked ); }
 		);
 		QObject::connect(
 				ui.precise_paint_radio, &QRadioButton::clicked,
-				[ = ]( bool checked ) { change_radio_param( &settings.vertex_interpolation, !checked ); }
+				[=]( bool checked ) { change_radio_param( &settings.vertex_interpolation, !checked ); }
 		);
 		QObject::connect(
 				ui.vertex_paint_radio, &QRadioButton::clicked,
-				[ = ]( bool checked ) { change_radio_param( &settings.vertex_interpolation, checked ); }
+				[=]( bool checked ) { change_radio_param( &settings.vertex_interpolation, checked ); }
 		);
 		QObject::connect(
 				ui.constant_n_radio, &QRadioButton::clicked,
-				[ = ]( bool checked ) { change_radio_param( &settings.texture_normal_map, !checked ); }
+				[=]( bool checked ) { change_radio_param( &settings.texture_normal_map, !checked ); }
 		);
 		QObject::connect(
 				ui.texture_n_radio, &QRadioButton::clicked,
-				[ = ]( bool checked ) { change_radio_param( &settings.texture_normal_map, checked ); }
+				[=]( bool checked ) { change_radio_param( &settings.texture_normal_map, checked ); }
 		);
 
 		QObject::connect(
-				ui.borders_check, &QCheckBox::clicked, [ = ]( bool checked ) { toggle_draw_borders( checked ); }
+				ui.borders_check, &QCheckBox::clicked, [=]( bool checked ) { toggle_draw_borders( checked ); }
 		);
 	}
 
@@ -272,7 +264,9 @@ private:
 	static std::string format_float_number( float value )
 	{
 		std::string str = std::to_string( value );
-		return str.substr( 0, str.find( '.' ) + 3 );
+		int dot_index = str.find( '.' );
+		if ( dot_index == std::string::npos ) dot_index = str.find( ',' );
+		return str.substr( 0, dot_index + 3 );
 	}
 };
 
