@@ -40,6 +40,3 @@ or interpolated from triangles' vertices
 * change parameters `kd`, `ks` and `m` (`kd` and `ks` sliders are bound together, so that always `kd = 1 - ks`)
 
 In the folder `img`, there is one sample image to use as fill texture and one to use as a normal map.
-
-
-## Remarks
